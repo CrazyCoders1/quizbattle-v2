@@ -1,0 +1,170 @@
+
+--- PAGE 1 ---
+ JEE-Main -30-01-2024 (Memory Based) 
+[EVENING  SHIFT]  
+ 
+Physics  
+ 
+Question: Two polarisers A and B are kept one after the other. Their pass axis makes an 
+angle of 45 with each other. An unpolarized light of intensity I 0 strikes A first and then B. 
+Find the intensity of the light emergent from B. 
+Options:  
+(a) 𝐼𝐼0
+2  
+(b) 𝐼𝐼0
+4  
+(c) 𝐼𝐼0
+8  
+(d) 𝐼𝐼0
+6  
+Answer: (b)  
+ 
+Question:  Simple pendulum of length ‘l = 4’ is taken to height ‘R’ above earth surface 
+calculate time period at its height {R → Radius of Earth & Taken π2 = g} 
+Options:  
+(a) 4 sec  
+(b) 8 sec  
+(c) 2 sec  
+(d) 10 sec 
+Answer: (b)  
+ 
+Question : If for a given planet 𝑅𝑅𝑃𝑃=1
+3𝑅𝑅𝐸𝐸 & 𝑀𝑀𝑃𝑃=1
+6𝑀𝑀𝐸𝐸 then find the escape speed for this 
+planet if the escape speed of earth is 11.2 km/hr  
+Options:  
+(a) 7.9 km/hr 
+(b) 11.2 km/hr 
+(c) 7.9 m/s 
+(d) 8.5 m/s 
+Answer: (a)  
+ 
+Question: A block of mass 1 kg is pulled up on an inclined plane 60o by a force of 10 N. 
+Coefficient of friction is µ = 0.1. Find the magnitude of Work done by the friction by the time 
+block moves up by 10 m. 
+Options:  
+(a) 5 × 10-2 J 
+(b) 5 J  
+(c) 5000 J 
+(d) 500 J 
+Answer: (b)  
+ 
+Question: Find the Tension T 1 & T 2 in the given system 
+JEE-Main-30-01-2024 EVENING SHIFT
+JEE | NEET | Class 8 - 10 Download eSaral App www.esaral.com 1AIM: FREE EDUCATION TO ALL [APUL]
+
+--- PAGE 2 ---
+  
+Options:  
+(a) T 1 = 40, T 2 = 64 
+(b) T 1 = 64, T 2 = 40 
+(c) T 1 = 30, T 2 = 64 
+(d) T 1 = 40, T 2 = 30 
+Answer: (a)  
+ 
+Question: Find value of P is the dimensional equation  
+M1 = [CP G-½ h1/2] 
+(1) → C → speed of light  
+(2) → G → Universal gravitational constant  
+(3) → h → Planck's constant  
+Options:  
+(a) 1 
+(b) ½  
+(c) -½  
+(d) -1 
+Answer: (b)  
+ 
+Question: Charge -q rotating around infinite long wire having charge density ⍴ at distance r 
+then calculate the time period of that -q Charge.  
+Options:  
+(a) 2𝜋𝜋�𝑚𝑚𝑟𝑟2
+2𝑘𝑘𝑘𝑘𝑘𝑘  
+(b)  𝜋𝜋�𝑚𝑚𝑟𝑟2
+2𝑘𝑘𝑘𝑘𝑘𝑘 
+(c) 2𝜋𝜋�𝑚𝑚𝑟𝑟2
+𝑘𝑘𝑘𝑘𝑘𝑘  
+(d) 𝜋𝜋�𝑚𝑚𝑟𝑟2
+𝑘𝑘𝑘𝑘𝑘𝑘 
+Answer: (a)  
+ 
+Question: Match the following  
+A ∮𝐵𝐵�⃗⋅𝑑𝑑𝐴𝐴⃗= 0 P Faraday & lenz’s law  
+B ∮𝐸𝐸�⃗⋅𝑑𝑑𝐴𝐴⃗=𝑄𝑄𝑖𝑖𝑖𝑖
+𝐸𝐸0 Q Gauss law on magnetism  
+C ∮𝐵𝐵�⃗⋅𝑑𝑑𝑙𝑙⃗=𝜇𝜇0𝑖𝑖(𝑒𝑒𝑖𝑖𝑒𝑒𝑒𝑒𝑒𝑒𝑒𝑒𝑒𝑒𝑒𝑒 ) R Ampere’s law  
+JEE-Main-30-01-2024 EVENING SHIFT
+JEE | NEET | Class 8 - 10 Download eSaral App www.esaral.com 2AIM: FREE EDUCATION TO ALL [APUL]
+
+--- PAGE 3 ---
+ D 𝜙𝜙𝐸𝐸��⃗⋅𝑑𝑑𝑙𝑙⃗=−𝑑𝑑𝜙𝜙8
+𝑑𝑑𝑑𝑑 S Gauss law of Electrostatics  
+ 
+Options:  
+(a) A → Q, B → S, C → R, D → P  
+(b) A → S, B → S, C → P, D → R   
+(c) A → S, B → Q, C → R, D → P  
+(d) A → Q, B → P, C → S, D → R  
+Answer: (a)  
+ 
+Question: If 1000 drops of surface energy E 1 are merged to form 1 bigger drop of Surface 
+Energy E 2 then E 1 / E2 is _____  
+ 
+Question: 2 moles of monatomic gas ( 𝛾𝛾 = 3/2) is mixed with 3 moles of diatomic gas  
+(𝛾𝛾 = 5/7).  
+Find 𝛾𝛾 of the mixture here 𝛾𝛾 = C p/CV. 
+Options:  
+(a) 5/3  
+(b) 29/19 
+(c) 11/7  
+(d) 39/29 
+Answer: (b)  
+ 
+Question: Magnetic field at ‘O’ is x√2 × 10-7 Tesla. Find x. 
+ 
+Options:  
+Answer: (40)  
+ 
+Question: Magnetic moment of electron is proportional to np find P 
+Options:  
+(a) 3 
+(b) 2  
+(c) 4 
+(d) 1  
+Answer: (d)  
+ 
+Question: Heat developed in wire is H if wire is cut in 2 equal parts and joined in parallel 
+then new heat dissipated will be? 
+Options:  
+(a) H  
+JEE-Main-30-01-2024 EVENING SHIFT
+JEE | NEET | Class 8 - 10 Download eSaral App www.esaral.com 3AIM: FREE EDUCATION TO ALL [APUL]
+
+--- PAGE 4 ---
+ (b) 2H  
+(c) 3H  
+(d) 4H  
+Answer: (d)  
+ 
+Question: Number of spectral line for He+ for Transition from n = 5 to 1  
+Options:  
+(a) 6 
+(b) 10  
+(c) 12  
+(d) 3  
+Answer: (b)  
+ 
+Question: Find the Voltage Across 2.5 kΩ
+ 
+Options:  
+(a) 8.75 V 
+(b) 7.75 V 
+(c) 6.75 V 
+(d) 5.75 V 
+Answer: (a)  
+ 
+Question: A disc of Moment of inertia 4 kgm2 is spinning freely at 10 rad/s, a second disc of 
+Moment of Inertia 2 Kgm2 at angular speed 4 rad.s is put on the first disc and finally they 
+both rotate with same angular speed. What is the change in KE?  
+Answer: (24)  
+JEE-Main-30-01-2024 EVENING SHIFT
+ www.esaral.com 4AIM: FREE EDUCATION TO ALL [APUL]

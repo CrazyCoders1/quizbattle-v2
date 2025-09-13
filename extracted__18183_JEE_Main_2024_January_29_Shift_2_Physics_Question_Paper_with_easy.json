@@ -1,0 +1,156 @@
+{
+  "pdf_name": "_18183_JEE_Main_2024_January_29_Shift_2_Physics_Question_Paper_with.pdf",
+  "difficulty_mode": "easy",
+  "total_questions": 9,
+  "questions": [
+    {
+      "question": "Find out the current i.",
+      "options": [
+        "1 A",
+        "2 A",
+        "3 A",
+        "4 A"
+      ],
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "hint": "Apply Kirchhoff's laws or Ohm's law to find the current.",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "Two blocks of equal volume have same elongations for deforming forces find F1/F2?",
+      "options": [
+        "4 : 1",
+        "1 : 4",
+        "16 : 1",
+        "1 : 16"
+      ],
+      "correct_answer": 2,
+      "difficulty": "easy",
+      "hint": "Consider the relationship between force, stress, and strain in materials.",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "Find out The resistance R in the Given Circuit",
+      "options": [
+        "2 Ω",
+        "3 Ω",
+        "4 Ω",
+        "5 Ω"
+      ],
+      "correct_answer": 3,
+      "difficulty": "easy",
+      "hint": "Use series and parallel resistance formulas to simplify the circuit.",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "Time period of a particle performing SHM is 6 π s. Find the time taken by the particle to go from x = A to x = A/2",
+      "options": [
+        "π s",
+        "π/2 s",
+        "3π/2 s",
+        "3 π s"
+      ],
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "hint": "Use the time period formula and phase difference to determine the required time.",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "For an ideal gas, pressure is 1.38 atm and number of molecules are 2 × 10²⁵ per m³. Find the temperature of the gas?",
+      "options": [
+        "1500 K",
+        "1000 K",
+        "500 K",
+        "250 K"
+      ],
+      "correct_answer": 2,
+      "difficulty": "easy",
+      "hint": "Apply the ideal gas law relating pressure, temperature, and number density.",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "If the cross sectional radii are R and R/2 then find the ratio of the extensions",
+      "options": [
+        "2:1",
+        "1:2",
+        "1:4",
+        "4:1"
+      ],
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "hint": "Use Hooke's law and the relationship between extension, force, and cross-sectional area.",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "A particle is tied to a rope. If its moving such that it just completes the vertical circle. Find the ratio of kinetic energy at lowermost point & upper most point respectively?",
+      "options": [
+        "5:1",
+        "3:2",
+        "2:1",
+        "1:5"
+      ],
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "hint": "Apply conservation of mechanical energy and consider the conditions for vertical circular motion.",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "Bob of pendulum of length l is released from horizontal position. If 10% of energy is lost then find the velocity on reaching the lowest point",
+      "options": [
+        "√(9gl/5)",
+        "√(3gl/5)",
+        "√(3gl)",
+        "√(5gl)"
+      ],
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "hint": "Account for energy loss and use conservation of mechanical energy to find the velocity.",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "A planet revolving around sun in a circular orbit of radius R has a time period T₁. Another planet revolving around sun in a circular orbit of radius R/4 has a time period T₂. Find T₂/T₁",
+      "options": [
+        "1:8",
+        "8:1",
+        "4:1",
+        "1:4"
+      ],
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "hint": "Use Kepler's third law for circular orbits.",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    }
+  ],
+  "analysis": {
+    "easy_count": 9,
+    "tough_count": 0,
+    "issues_found": []
+  }
+}

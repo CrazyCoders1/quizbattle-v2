@@ -1,0 +1,49 @@
+{
+  "timestamp": "2025-09-13T17:27:50.811534",
+  "summary": {
+    "total": 6,
+    "passed": 6,
+    "warned": 0,
+    "failed": 0,
+    "success_rate": 100.0
+  },
+  "test_results": {
+    "EXTRACT__18183_JEE_Main_2024_January_29_Shift_2_Physics_Question_Paper_with.pdf_easy": {
+      "status": "PASS",
+      "details": "9 questions (9 easy, 0 tough)",
+      "issues": [],
+      "timestamp": "2025-09-13T17:23:12.586222"
+    },
+    "EXTRACT__18183_JEE_Main_2024_January_29_Shift_2_Physics_Question_Paper_with.pdf_tough": {
+      "status": "PASS",
+      "details": "10 questions (0 easy, 10 tough)",
+      "issues": [],
+      "timestamp": "2025-09-13T17:23:33.574863"
+    },
+    "EXTRACT__18183_JEE_Main_2024_January_29_Shift_2_Physics_Question_Paper_with.pdf_mixed": {
+      "status": "PASS",
+      "details": "6 questions (2 easy, 4 tough)",
+      "issues": [],
+      "timestamp": "2025-09-13T17:25:51.499679"
+    },
+    "EXTRACT__19625_JEE_Main_2024_January_30_Shift_2_Physics_Question_Paper_with.pdf_easy": {
+      "status": "PASS",
+      "details": "6 questions (6 easy, 0 tough)",
+      "issues": [],
+      "timestamp": "2025-09-13T17:26:20.175520"
+    },
+    "EXTRACT__19625_JEE_Main_2024_January_30_Shift_2_Physics_Question_Paper_with.pdf_tough": {
+      "status": "PASS",
+      "details": "8 questions (0 easy, 8 tough)",
+      "issues": [],
+      "timestamp": "2025-09-13T17:26:51.579130"
+    },
+    "EXTRACT__19625_JEE_Main_2024_January_30_Shift_2_Physics_Question_Paper_with.pdf_mixed": {
+      "status": "PASS",
+      "details": "8 questions (4 easy, 4 tough)",
+      "issues": [],
+      "timestamp": "2025-09-13T17:27:50.772157"
+    }
+  },
+  "issues_found": []
+}

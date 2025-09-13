@@ -1,0 +1,204 @@
+
+--- PAGE 1 ---
+1 JEE-Main -29-01-2024 (Memory Based) 
+[EVENING  SHIFT]  
+ 
+Physics  
+ 
+Question: Find out the current i. 
+ 
+Options:  
+(a) 1 A  
+(b) 2 A  
+(c) 3 A  
+(d) 4 A  
+Answer: (a)  
+ 
+Question: Two equal charges of masses m 1 & m 2 are sent in a transverse magnetic field by 
+accelerating through same potential difference. Find the ratio of their radii inside? 
+Options:  
+(a) 2
+1m
+m 
+(b) 1
+2m
+m  
+(c) 1
+2m
+m 
+(d) 2
+1m
+m  
+Answer: (b)  
+ 
+Question: A rod is dropped as shown where horizontal component of Earth’s magnetic field 
+is B H.  
+Find EMF (t)?  
+JEE-Main-29-01-2024 EVENING SHIFT
+www.esaral.com
+JEE | NEET | Class 8 - 10 Download eSaral AppAIM: FREE EDUCATION TO ALL [APUL]
+
+--- PAGE 2 ---
+  
+ 
+Question:  Find Y truth table?  
+ 
+Question: Two blocks of equal volume have same elongations for deforming forces find 
+F1/F2? 
+ 
+Options:  
+(a) 4 : 1  
+(b) 1 : 4  
+(c) 16 : 1  
+(d) 1 : 16 
+Answer: (c)  
+ 
+Question: Find out The resistance R in the Given Circuit  
+ 
+Options:  
+(a) 2 Ω  
+(b) 3 Ω  
+(c) 4 Ω  
+(d) 5 Ω  
+Answer: (d)  
+ 
+JEE | NEET | Class 8 - 10 Download eSaral App
+JEE-Main-29-01-2024 EVENING SHIFT www.esaral.com 2AIM: FREE EDUCATION TO ALL [APUL]
+
+--- PAGE 3 ---
+ Question: Time period of a particle performing SHM is 6 π s. Find the time taken by the 
+particle to go from x = A to x = A/2 
+Options:  
+(a) π s 
+(b) π/2 s 
+(c) 3π/2 s 
+(d) 3 π s 
+Answer: (a)  
+ 
+Question: For an ideal gas, pressure is 1.38 atm and number of molecules are 2 × 1025 per m3 
+Find the temperature of the gas ? 
+Options:  
+(a) 1500 K 
+(b) 1000 K 
+(c) 500 K 
+(d) 250 K 
+Answer: (c)  
+ 
+Question: Two Rods of same length and material is applied with the forces F and F/2 
+respectively. If the cross sectional radii are R  and R/2 then find the ratio of the extensions 
+ 
+Options:  
+(a) 2:1  
+(b) 1:2  
+(c) 1:4  
+(d) 4:1  
+Answer: (b)  
+ 
+Question: A particle is tied to a rope. If its  moving such that it just completes the vertical 
+circle. Find the ratio of kinetic energy at lowermost point & upper most point respectively? 
+Options:  
+(a) 5:1  
+(b) 3:2  
+(c) 2:1  
+(d) 1:5  
+Answer: (a)  
+ 
+Question: Bob of pendulum of length l is released from horizontal position. If 10% of energy 
+is lost then find the velocity on reaching the lowest point 
+Options:  
+(a) √(9gl/5)  
+(b) √(3gl/5)  
+(c) √(3gl)  
+(d) √(5gl)  
+JEE | NEET | Class 8 - 10 Download eSaral App
+JEE-Main-29-01-2024 EVENING SHIFT www.esaral.com 3AIM: FREE EDUCATION TO ALL [APUL]
+
+--- PAGE 4 ---
+ Answer: (a)  
+ 
+Question: Two particles each of charge q are accelerated by same potential difference and 
+projected into the same magnetic field. Ratio of Radii is given then find the ratio of Mass. 
+ 
+Question: A planet revolving around sun in a circular orbit of radius R has a time period T 1. 
+Another planet revolving around sun in a circular orbit of radius R/4 has a time period T 2. 
+Find T 2/T1 
+Options:  
+(a) 1:8  
+(b) 8:1  
+(c) 4:1  
+(d) 1:4  
+Answer: (a)  
+ 
+Question: S1: Positive charge is present on the nucleus and electrons revolve around the 
+nucleus in Rutherford's model 
+S2: Plum pudding is a special case of Rutherford model. 
+Options:  
+(a) Both S1 & S2 are false  
+(b) Both S1 & S2 are true 
+(c) S1 is true but S2 is false 
+(d) S2 is true but S1 is false 
+Answer: (c)  
+ 
+Question: In a single slit diffraction experiment, wavelength used is 6000 Å. The distance 
+between 1st and 3rd minima is 3mm. If screen is 50 cm away from the slit, find the slit width  
+Options:  
+(a) 0.1 mm 
+(b) 0.2 mm 
+(c) 0.3 mm 
+(d) 0.4 mm 
+Answer: (b)  
+ 
+Question: An electromagnetic wave is travelling in positive x direction. Electric field at a 
+location is given by .6ˆ9Ej=
+ (N/C). What is the value of B
+ at this location? 
+Options:  
+(a) 8a ˆ 3.2 10  Tesl k−×   
+(b) 8a ˆ 28.8 10  Teslk×   
+(c) 83.2 10  Teslaˆk−−×   
+(d) 828.8 10  Teslaˆk −×   
+Answer: (a)  
+ 
+Question: The distance between real object and virtual Image is given that is 15 cm, the 
+magnification is 2. Find the focal length of Mirror. 
+Options:  
+(a) f = -10 cm 
+(b) f = 10 cm  
+(c) f = -5 cm  
+JEE | NEET | Class 8 - 10 Download eSaral App
+JEE-Main-29-01-2024 EVENING SHIFT www.esaral.com 4AIM: FREE EDUCATION TO ALL [APUL]
+
+--- PAGE 5 ---
+ (d) f = 5 cm  
+Answer: (a)  
+ 
+Question: n moles of triatomic gas (f = 6) and 2 mole of monatomic gas are mixed together 
+to give a mixture of 5 degrees of freedom. Find ‘n’ 
+Options:  
+(a) 1 
+(b) 4  
+(c) 3 
+(d) 5  
+Answer: (b)  
+ 
+Question: Below Current is given & Ammeter Reads 0.9 A & Current in 20 Ω is 0.3 A. Find 
+Value of R  
+ 
+Options:  
+(a) 10 Ω  
+(b) 20 Ω  
+(c) 30 Ω  
+(d) 40 Ω  
+Answer: (c)  
+ 
+Question: Electric field is given in a region 53 ˆ 6ˆˆ E i jk=++
+ N/C. Find flux linkage through 
+a surface area 30 m2 that is in YZ plane? 
+Options:  
+(a) 100 Wb  
+(b) 130 Wb 
+(c) 150 Wb 
+(d) 180 Wb 
+Answer: (d)  
+JEE | NEET | Class 8 - 10 Download eSaral App
+JEE-Main-29-01-2024 EVENING SHIFT www.esaral.com 5AIM: FREE EDUCATION TO ALL [APUL]

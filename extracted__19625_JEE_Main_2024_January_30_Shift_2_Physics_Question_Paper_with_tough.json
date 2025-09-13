@@ -1,0 +1,140 @@
+{
+  "pdf_name": "_19625_JEE_Main_2024_January_30_Shift_2_Physics_Question_Paper_with.pdf",
+  "difficulty_mode": "tough",
+  "total_questions": 8,
+  "questions": [
+    {
+      "question": "Two polarisers A and B are kept one after the other. Their pass axis makes an angle of 45 with each other. An unpolarized light of intensity I₀ strikes A first and then B. Find the intensity of the light emergent from B.",
+      "options": [
+        "I₀/2",
+        "I₀/4",
+        "I₀/8",
+        "I₀/6"
+      ],
+      "correct_answer": 1,
+      "difficulty": "tough",
+      "hint": "Use Malus' Law: After first polarizer (A), intensity becomes I₀/2. After second polarizer (B) at 45°, multiply by cos²(45°) = 0.5",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "Simple pendulum of length 'l = 4' is taken to height 'R' above earth surface calculate time period at its height {R → Radius of Earth & Taken π² = g}",
+      "options": [
+        "4 sec",
+        "8 sec",
+        "2 sec",
+        "10 sec"
+      ],
+      "correct_answer": 1,
+      "difficulty": "tough",
+      "hint": "Time period at height R: T = 2π√[l/(g')] where g' = g/(1 + h/R)². Here h = R ⇒ g' = g/4",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "If for a given planet R_P = 1/3 R_E & M_P = 1/6 M_E then find the escape speed for this planet if the escape speed of earth is 11.2 km/s",
+      "options": [
+        "7.9 km/s",
+        "11.2 km/s",
+        "7.9 m/s",
+        "8.5 m/s"
+      ],
+      "correct_answer": 0,
+      "difficulty": "tough",
+      "hint": "Escape velocity formula: v_escape = √(2GM/R). Use ratio v_p/v_E = √[(M_p/M_E)(R_E/R_p)]",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "A block of mass 1 kg is pulled up on an inclined plane 60° by a force of 10 N. Coefficient of friction is µ = 0.1. Find the magnitude of Work done by the friction by the time block moves up by 10 m.",
+      "options": [
+        "5 × 10⁻² J",
+        "5 J",
+        "5000 J",
+        "500 J"
+      ],
+      "correct_answer": 1,
+      "difficulty": "tough",
+      "hint": "Work done by friction = μmgcosθ × distance. Calculate normal force (mgcosθ) first",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "Find the Tension T₁ & T₂ in the given system",
+      "options": [
+        "T₁ = 40, T₂ = 64",
+        "T₁ = 64, T₂ = 40",
+        "T₁ = 30, T₂ = 64",
+        "T₁ = 40, T₂ = 30"
+      ],
+      "correct_answer": 0,
+      "difficulty": "tough",
+      "hint": "Analyze forces using pulley systems and equilibrium conditions. Consider tension distribution in multiple pulley arrangements",
+      "has_image": true,
+      "image_description": "Pulley system with multiple ropes and masses where tensions need to be calculated using force balance equations",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "Find value of P in the dimensional equation M¹ = [Cᴾ G⁻½ h¹/²] where C → speed of light, G → Universal gravitational constant, h → Planck's constant",
+      "options": [
+        "1",
+        "½",
+        "-½",
+        "-1"
+      ],
+      "correct_answer": 1,
+      "difficulty": "tough",
+      "hint": "Perform dimensional analysis: Express each constant in terms of [M], [L], [T] dimensions and equate powers",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "Charge -q rotating around infinite long wire having charge density λ at distance r then calculate the time period of that -q Charge.",
+      "options": [
+        "2π√(mr²/(2kλq))",
+        "π√(mr²/(2kλq))",
+        "2π√(mr²/(kλq))",
+        "π√(mr²/(kλq))"
+      ],
+      "correct_answer": 0,
+      "difficulty": "tough",
+      "hint": "Equate centripetal force to electric force: mv²/r = (2kλq)/r. Relate velocity to angular velocity (v = 2πr/T)",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "2 moles of monatomic gas (γ = 3/2) is mixed with 3 moles of diatomic gas (γ = 5/7). Find γ of the mixture where γ = C_p/C_v.",
+      "options": [
+        "5/3",
+        "29/19",
+        "11/7",
+        "39/29"
+      ],
+      "correct_answer": 1,
+      "difficulty": "tough",
+      "hint": "Calculate C_v and C_p for each gas. Use formula: γ_mix = (n₁C_p₁ + n₂C_p₂)/(n₁C_v₁ + n₂C_v₂)",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    }
+  ],
+  "analysis": {
+    "easy_count": 0,
+    "tough_count": 8,
+    "issues_found": []
+  }
+}

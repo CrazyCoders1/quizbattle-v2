@@ -1,0 +1,90 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: quizbattle_postgres
+    environment:
+      POSTGRES_DB: quizbattle
+      POSTGRES_USER: quizbattle
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - quizbattle_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U quizbattle"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # MongoDB Database
+  mongodb:
+    image: mongo:6.0
+    container_name: quizbattle_mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: quizbattle_logs
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - quizbattle_network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Flask Backend
+  backend:
+    build: ./backend
+    container_name: quizbattle_backend
+    environment:
+      SECRET_KEY: your-secret-key-change-in-production
+      JWT_SECRET_KEY: your-jwt-secret-key-change-in-production
+      DATABASE_URL: postgresql://quizbattle:password@postgres:5432/quizbattle
+      MONGODB_URL: mongodb://admin:password@mongodb:27017/
+      MONGODB_DB: quizbattle_logs
+      FLASK_ENV: production
+      FLASK_DEBUG: False
+    volumes:
+      - ./backend:/app
+      - backend_uploads:/app/uploads
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+    networks:
+      - quizbattle_network
+    restart: unless-stopped
+
+  # React Frontend
+  frontend:
+    build: ./frontend
+    container_name: quizbattle_frontend
+    environment:
+      REACT_APP_API_URL: http://localhost:5000/api
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - quizbattle_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  mongodb_data:
+  backend_uploads:
+
+networks:
+  quizbattle_network:
+    driver: bridge

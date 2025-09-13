@@ -1,0 +1,119 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15
+    container_name: quizbattle_postgres
+    environment:
+      POSTGRES_DB: quizbattle_prod
+      POSTGRES_USER: quizbattle_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/migrations:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    networks:
+      - quizbattle_network
+
+  # MongoDB for logging
+  mongodb:
+    image: mongo:6
+    container_name: quizbattle_mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - "27017:27017"
+    restart: unless-stopped
+    networks:
+      - quizbattle_network
+
+  # Redis for caching and rate limiting
+  redis:
+    image: redis:7-alpine
+    container_name: quizbattle_redis
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    networks:
+      - quizbattle_network
+
+  # Flask Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.prod
+    container_name: quizbattle_backend
+    env_file:
+      - ./backend/.env.production
+    environment:
+      - DATABASE_URL=postgresql://quizbattle_user:${POSTGRES_PASSWORD}@postgres:5432/quizbattle_prod
+      - MONGODB_URI=mongodb://admin:${MONGO_PASSWORD}@mongodb:27017/quizbattle_logs_prod?authSource=admin
+      - RATELIMIT_STORAGE_URL=redis://redis:6379
+    volumes:
+      - ./uploads:/var/lib/quizbattle/uploads
+      - ./logs:/var/log/quizbattle
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres
+      - mongodb
+      - redis
+    restart: unless-stopped
+    networks:
+      - quizbattle_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # React Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+      args:
+        - REACT_APP_API_URL=https://api.yourdomain.com/api
+    container_name: quizbattle_frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - quizbattle_network
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: quizbattle_nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+      - ./logs:/var/log/nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+      - frontend
+    restart: unless-stopped
+    networks:
+      - quizbattle_network
+
+volumes:
+  postgres_data:
+  mongodb_data:
+  redis_data:
+
+networks:
+  quizbattle_network:
+    driver: bridge

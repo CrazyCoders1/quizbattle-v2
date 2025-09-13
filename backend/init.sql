@@ -1,0 +1,2 @@
+-- Initialize QuizBattle database
+-- Database 'quizbattle' is already created by Docker environment variables

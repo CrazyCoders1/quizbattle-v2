@@ -1,0 +1,140 @@
+{
+  "pdf_name": "_19625_JEE_Main_2024_January_30_Shift_2_Physics_Question_Paper_with.pdf",
+  "difficulty_mode": "mixed",
+  "total_questions": 8,
+  "questions": [
+    {
+      "question": "Two polarisers A and B are kept one after the other. Their pass axis makes an angle of 45 with each other. An unpolarized light of intensity I0 strikes A first and then B. Find the intensity of the light emergent from B.",
+      "options": [
+        "I0/2",
+        "I0/4",
+        "I0/8",
+        "I0/6"
+      ],
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "hint": "Use Malus' Law after accounting for initial polarization by first polarizer (intensity becomes I0/2 after A).",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "Simple pendulum of length 'l = 4' is taken to height 'R' above earth surface calculate time period at its height {R → Radius of Earth & Taken π² = g}",
+      "options": [
+        "4 sec",
+        "8 sec",
+        "2 sec",
+        "10 sec"
+      ],
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "hint": "Time period formula at height h: T = 2π√(l/g'). Use g' = g(R/(R+h))² with h=R.",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "If for a given planet RP = 1/3 RE & MP = 1/6 ME then find the escape speed for this planet if the escape speed of earth is 11.2 km/s",
+      "options": [
+        "7.9 km/s",
+        "11.2 km/s",
+        "7.9 m/s",
+        "8.5 m/s"
+      ],
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "hint": "Use escape velocity formula v ∝ √(M/R). Calculate ratio (√(MP/ME × RE/RP)).",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "Find value of P in the dimensional equation M¹ = [CP G⁻½ h½] where C = speed of light, G = gravitational constant, h = Planck's constant",
+      "options": [
+        "1",
+        "½",
+        "-½",
+        "-1"
+      ],
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "hint": "Equate dimensions of both sides. Use [C] = LT⁻¹, [G] = M⁻¹L³T⁻², [h] = ML²T⁻¹.",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "A block of mass 1 kg is pulled up on an inclined plane 60° by a force of 10 N. Coefficient of friction is µ = 0.1. Find the magnitude of Work done by the friction by the time block moves up by 10 m.",
+      "options": [
+        "5 × 10⁻² J",
+        "5 J",
+        "5000 J",
+        "500 J"
+      ],
+      "correct_answer": 1,
+      "difficulty": "tough",
+      "hint": "Calculate frictional force = µN. Find normal reaction N = mgcosθ. Multiply by displacement.",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "Find the Tension T1 & T2 in the given system",
+      "options": [
+        "T1 = 40, T2 = 64",
+        "T1 = 64, T2 = 40",
+        "T1 = 30, T2 = 64",
+        "T1 = 40, T2 = 30"
+      ],
+      "correct_answer": 0,
+      "difficulty": "tough",
+      "hint": "Apply equilibrium conditions. Likely involves pulley system with multiple masses - use free body diagrams.",
+      "has_image": true,
+      "image_description": "System likely shows masses connected through pulleys with different tensions in ropes.",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "Charge -q rotating around infinite long wire having charge density λ at distance r. Calculate the time period of that -q charge.",
+      "options": [
+        "2π√(mr²/(2kλq))",
+        "π√(mr²/(2kλq))",
+        "2π√(mr²/(kλq))",
+        "π√(mr²/(kλq))"
+      ],
+      "correct_answer": 0,
+      "difficulty": "tough",
+      "hint": "Balance centripetal force with electrostatic force. Electric field from wire E = 2kλ/r.",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "2 moles of monatomic gas (γ = 5/3) is mixed with 3 moles of diatomic gas (γ = 7/5). Find γ of the mixture.",
+      "options": [
+        "5/3",
+        "29/19",
+        "11/7",
+        "39/29"
+      ],
+      "correct_answer": 1,
+      "difficulty": "tough",
+      "hint": "Use formula γ_mix = (n1Cp1 + n2Cp2)/(n1Cv1 + n2Cv2). Calculate Cp and Cv for each gas first.",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    }
+  ],
+  "analysis": {
+    "easy_count": 4,
+    "tough_count": 4,
+    "issues_found": []
+  }
+}

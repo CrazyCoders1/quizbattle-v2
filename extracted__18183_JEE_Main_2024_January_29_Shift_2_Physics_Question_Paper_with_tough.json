@@ -1,0 +1,172 @@
+{
+  "pdf_name": "_18183_JEE_Main_2024_January_29_Shift_2_Physics_Question_Paper_with.pdf",
+  "difficulty_mode": "tough",
+  "total_questions": 10,
+  "questions": [
+    {
+      "question": "Find out the current i.",
+      "options": [
+        "1 A",
+        "2 A",
+        "3 A",
+        "4 A"
+      ],
+      "correct_answer": 0,
+      "difficulty": "tough",
+      "hint": "Use Kirchhoff's laws to analyze the circuit. Calculate total resistance and apply Ohm's law.",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "Two equal charges of masses m₁ & m₂ are sent in a transverse magnetic field by accelerating through same potential difference. Find the ratio of their radii inside?",
+      "options": [
+        "√(m₂/m₁)",
+        "√(m₁/m₂)",
+        "m₁/m₂",
+        "m₂/m₁"
+      ],
+      "correct_answer": 1,
+      "difficulty": "tough",
+      "hint": "Radius formula r = √(2mV/qB). Since potential (V) and charge (q) are same, radius ratio depends on √(m₁/m₂).",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "Two blocks of equal volume have same elongations for deforming forces find F₁/F₂?",
+      "options": [
+        "4 : 1",
+        "1 : 4",
+        "16 : 1",
+        "1 : 16"
+      ],
+      "correct_answer": 2,
+      "difficulty": "tough",
+      "hint": "Use Young's modulus formula: F/A = Y(ΔL/L). Since ΔL and L are same, force ratio depends on cross-sectional area ratio squared.",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "Find out The resistance R in the Given Circuit",
+      "options": [
+        "2 Ω",
+        "3 Ω",
+        "4 Ω",
+        "5 Ω"
+      ],
+      "correct_answer": 3,
+      "difficulty": "tough",
+      "hint": "Analyze series-parallel combinations. Look for balanced Wheatstone bridge configurations if applicable.",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "Time period of a particle performing SHM is 6π s. Find the time taken by the particle to go from x = A to x = A/2",
+      "options": [
+        "π s",
+        "π/2 s",
+        "3π/2 s",
+        "3π s"
+      ],
+      "correct_answer": 0,
+      "difficulty": "tough",
+      "hint": "Use angular displacement in SHM: θ = cos⁻¹(1/2) = π/3. Time = θ/ω where ω = 2π/T.",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "For an ideal gas, pressure is 1.38 atm and number of molecules are 2 × 10²⁵ per m³. Find the temperature of the gas ?",
+      "options": [
+        "1500 K",
+        "1000 K",
+        "500 K",
+        "250 K"
+      ],
+      "correct_answer": 2,
+      "difficulty": "tough",
+      "hint": "Use ideal gas equation PV = nRT. Convert pressure to Pascals and use Avogadro's number for mole calculation.",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "respectively. If the cross sectional radii are R and R/2 then find the ratio of the extensions",
+      "options": [
+        "2:1",
+        "1:2",
+        "1:4",
+        "4:1"
+      ],
+      "correct_answer": 1,
+      "difficulty": "tough",
+      "hint": "Extension ΔL ∝ 1/r⁴ (since area A = πr²). Radius ratio R:(R/2) gives extension ratio 1:16 inverse squared.",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "A particle is tied to a rope. If its moving such that it just completes the vertical circle. Find the ratio of kinetic energy at lowermost point & upper most point respectively?",
+      "options": [
+        "5:1",
+        "3:2",
+        "2:1",
+        "1:5"
+      ],
+      "correct_answer": 0,
+      "difficulty": "tough",
+      "hint": "At lowest point: KE = 5mgR (from energy conservation). At top: KE = mgR. Ratio = 5:1.",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "Bob of pendulum of length l is released from horizontal position. If 10% of energy is lost then find the velocity on reaching the lowest point",
+      "options": [
+        "√(9gl/5)",
+        "√(3gl/5)",
+        "√(3gl)",
+        "√(5gl)"
+      ],
+      "correct_answer": 0,
+      "difficulty": "tough",
+      "hint": "Potential energy at height l converts to kinetic energy with 10% loss: 0.9mgl = ½mv² → v = √(1.8gl).",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "A planet revolving around sun in a circular orbit of radius R has a time period T₁. Another planet revolving around sun in a circular orbit of radius R/4 has a time period T₂. Find T₂/T₁",
+      "options": [
+        "1:8",
+        "8:1",
+        "4:1",
+        "1:4"
+      ],
+      "correct_answer": 0,
+      "difficulty": "tough",
+      "hint": "Kepler's third law: T² ∝ R³. For R/4 radius, T₂/T₁ = (1/4)^(3/2) = 1/8.",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    }
+  ],
+  "analysis": {
+    "easy_count": 0,
+    "tough_count": 10,
+    "issues_found": []
+  }
+}

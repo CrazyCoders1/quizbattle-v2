@@ -1,0 +1,108 @@
+{
+  "pdf_name": "_18183_JEE_Main_2024_January_29_Shift_2_Physics_Question_Paper_with.pdf",
+  "difficulty_mode": "mixed",
+  "total_questions": 6,
+  "questions": [
+    {
+      "question": "Find out the current i.",
+      "options": [
+        "1 A",
+        "2 A",
+        "3 A",
+        "4 A"
+      ],
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "hint": "Apply Kirchhoff's laws or Ohm's law to determine the current in the circuit.",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "Time period of a particle performing SHM is 6π s. Find the time taken by the particle to go from x = A to x = A/2",
+      "options": [
+        "π s",
+        "π/2 s",
+        "3π/2 s",
+        "3π s"
+      ],
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "hint": "The time period of SHM is related to the angular frequency. Use the displacement equation x = A cos(ωt) to find the time taken to move from x = A to x = A/2.",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "Two equal charges of masses m₁ & m₂ are sent in a transverse magnetic field by accelerating through same potential difference. Find the ratio of their radii inside?",
+      "options": [
+        "m₂/m₁",
+        "m₁/m₂",
+        "√(m₁/m₂)",
+        "√(m₂/m₁)"
+      ],
+      "correct_answer": 1,
+      "difficulty": "tough",
+      "hint": "The radius of a charged particle's path in a magnetic field depends on its mass, charge, velocity, and magnetic field strength. Since both charges are accelerated through the same potential, their kinetic energies are equal, leading to a relationship between their velocities and masses.",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "Two blocks of equal volume have same elongations for deforming forces find F₁/F₂?",
+      "options": [
+        "4 : 1",
+        "1 : 4",
+        "16 : 1",
+        "1 : 16"
+      ],
+      "correct_answer": 2,
+      "difficulty": "tough",
+      "hint": "Use Hooke's Law and the concept of Young's modulus. Since the elongations are the same, the ratio of forces can be determined by the cross-sectional areas and lengths of the blocks.",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "Find out The resistance R in the Given Circuit",
+      "options": [
+        "2 Ω",
+        "3 Ω",
+        "4 Ω",
+        "5 Ω"
+      ],
+      "correct_answer": 3,
+      "difficulty": "tough",
+      "hint": "Analyze the given circuit diagram to apply series and parallel resistance combinations. The correct answer is found by simplifying the circuit step-by-step.",
+      "has_image": true,
+      "image_description": "The circuit likely contains a combination of resistors in series and parallel. By analyzing the arrangement, the total resistance can be calculated using equivalent resistance formulas.",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    },
+    {
+      "question": "For an ideal gas, pressure is 1.38 atm and number of molecules are 2 × 10²⁵ per m³. Find the temperature of the gas?",
+      "options": [
+        "1500 K",
+        "1000 K",
+        "500 K",
+        "250 K"
+      ],
+      "correct_answer": 2,
+      "difficulty": "tough",
+      "hint": "Use the ideal gas law in terms of number density: P = nkT, where n is the number of molecules per unit volume, k is Boltzmann's constant, and T is the temperature.",
+      "has_image": false,
+      "image_description": "",
+      "exam_type": "JEE Main",
+      "extraction_method": "openrouter_deepseek_deepseek-r1"
+    }
+  ],
+  "analysis": {
+    "easy_count": 2,
+    "tough_count": 4,
+    "issues_found": []
+  }
+}

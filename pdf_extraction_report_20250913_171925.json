@@ -1,0 +1,60 @@
+{
+  "timestamp": "2025-09-13T17:19:25.053058",
+  "summary": {
+    "total": 6,
+    "passed": 4,
+    "warned": 0,
+    "failed": 2,
+    "success_rate": 66.66666666666666
+  },
+  "test_results": {
+    "EXTRACT__18183_JEE_Main_2024_January_29_Shift_2_Physics_Question_Paper_with.pdf_easy": {
+      "status": "PASS",
+      "details": "9 questions (9 easy, 0 tough)",
+      "issues": [],
+      "timestamp": "2025-09-13T17:15:43.856671"
+    },
+    "EXTRACT__18183_JEE_Main_2024_January_29_Shift_2_Physics_Question_Paper_with.pdf_tough": {
+      "status": "PASS",
+      "details": "9 questions (0 easy, 9 tough)",
+      "issues": [],
+      "timestamp": "2025-09-13T17:16:10.150580"
+    },
+    "EXTRACT__18183_JEE_Main_2024_January_29_Shift_2_Physics_Question_Paper_with.pdf_mixed": {
+      "status": "FAIL",
+      "details": "6 questions (6 easy, 0 tough)",
+      "issues": [
+        "Mixed mode: No tough questions found",
+        "Mixed mode: Imbalanced difficulty ratio (easy: 100.0%)"
+      ],
+      "timestamp": "2025-09-13T17:17:13.171647"
+    },
+    "EXTRACT__19625_JEE_Main_2024_January_30_Shift_2_Physics_Question_Paper_with.pdf_easy": {
+      "status": "PASS",
+      "details": "6 questions (6 easy, 0 tough)",
+      "issues": [],
+      "timestamp": "2025-09-13T17:18:32.103037"
+    },
+    "EXTRACT__19625_JEE_Main_2024_January_30_Shift_2_Physics_Question_Paper_with.pdf_tough": {
+      "status": "PASS",
+      "details": "8 questions (0 easy, 8 tough)",
+      "issues": [],
+      "timestamp": "2025-09-13T17:19:02.721644"
+    },
+    "EXTRACT__19625_JEE_Main_2024_January_30_Shift_2_Physics_Question_Paper_with.pdf_mixed": {
+      "status": "FAIL",
+      "details": "4 questions (4 easy, 0 tough)",
+      "issues": [
+        "Mixed mode: No tough questions found",
+        "Mixed mode: Imbalanced difficulty ratio (easy: 100.0%)"
+      ],
+      "timestamp": "2025-09-13T17:19:24.930663"
+    }
+  },
+  "issues_found": [
+    "Mixed mode: No tough questions found",
+    "Mixed mode: Imbalanced difficulty ratio (easy: 100.0%)",
+    "Mixed mode: No tough questions found",
+    "Mixed mode: Imbalanced difficulty ratio (easy: 100.0%)"
+  ]
+}
