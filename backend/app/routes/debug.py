@@ -1,11 +1,101 @@
 from flask import Blueprint, jsonify, request, current_app
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app import db
-from app.models import Challenge, QuizResult, User, Leaderboard
+from app.models import Challenge, QuizResult, User, Leaderboard, Admin, QuizQuestion
 from sqlalchemy import func, desc
 from datetime import datetime
+import os
 
 debug_bp = Blueprint('debug', __name__)
+
+@debug_bp.route('/database/status', methods=['GET'])
+def get_database_status():
+    """Check database status and table existence (no auth required)"""
+    try:
+        current_app.logger.info("🔍 Checking database status")
+        
+        status = {
+            'database_accessible': True,
+            'tables': {},
+            'counts': {},
+            'initialization_status': 'unknown'
+        }
+        
+        # Test each model/table
+        try:
+            status['counts']['users'] = User.query.count()
+            status['tables']['users'] = True
+        except Exception as e:
+            status['tables']['users'] = False
+            status['counts']['users'] = f"Error: {str(e)}"
+        
+        try:
+            status['counts']['admins'] = Admin.query.count()
+            status['tables']['admins'] = True
+        except Exception as e:
+            status['tables']['admins'] = False
+            status['counts']['admins'] = f"Error: {str(e)}"
+        
+        try:
+            status['counts']['questions'] = QuizQuestion.query.count()
+            status['tables']['questions'] = True
+        except Exception as e:
+            status['tables']['questions'] = False
+            status['counts']['questions'] = f"Error: {str(e)}"
+            
+        try:
+            status['counts']['challenges'] = Challenge.query.count()
+            status['tables']['challenges'] = True
+        except Exception as e:
+            status['tables']['challenges'] = False
+            status['counts']['challenges'] = f"Error: {str(e)}"
+        
+        try:
+            status['counts']['quiz_results'] = QuizResult.query.count()
+            status['tables']['quiz_results'] = True
+        except Exception as e:
+            status['tables']['quiz_results'] = False
+            status['counts']['quiz_results'] = f"Error: {str(e)}"
+            
+        try:
+            status['counts']['leaderboard'] = Leaderboard.query.count()
+            status['tables']['leaderboard'] = True
+        except Exception as e:
+            status['tables']['leaderboard'] = False
+            status['counts']['leaderboard'] = f"Error: {str(e)}"
+        
+        # Check if all tables exist
+        all_tables_exist = all(status['tables'].values())
+        
+        if all_tables_exist:
+            admin_exists = status['counts'].get('admins', 0) > 0
+            questions_exist = status['counts'].get('questions', 0) > 0
+            
+            if admin_exists and questions_exist:
+                status['initialization_status'] = 'complete'
+            elif admin_exists:
+                status['initialization_status'] = 'partial (admin only)'
+            else:
+                status['initialization_status'] = 'tables exist but empty'
+        else:
+            status['initialization_status'] = 'tables missing'
+        
+        status['environment'] = {
+            'database_url_set': bool(os.environ.get('DATABASE_URL')),
+            'mongo_uri_set': bool(os.environ.get('MONGO_URI')),
+            'jwt_secret_set': bool(os.environ.get('JWT_SECRET'))
+        }
+        
+        current_app.logger.info(f"✅ Database status check completed: {status['initialization_status']}")
+        return jsonify(status), 200
+        
+    except Exception as e:
+        current_app.logger.error(f"❌ Database status check error: {str(e)}")
+        return jsonify({
+            'database_accessible': False,
+            'error': str(e),
+            'initialization_status': 'error'
+        }), 500
 
 @debug_bp.route('/user/<int:user_id>/data', methods=['GET'])
 @jwt_required()
