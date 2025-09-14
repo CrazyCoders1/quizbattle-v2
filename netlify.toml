@@ -12,6 +12,7 @@
   NODE_VERSION = "18"
   NPM_VERSION = "10"
   CI = "false"
+  NETLIFY_NEXT_PLUGIN_SKIP = "true"
 
 # Environment variables (set these in Netlify dashboard)
 # REACT_APP_API_URL = https://your-backend-name.onrender.com/api
