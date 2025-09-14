@@ -54,6 +54,7 @@ def create_app():
     from app.routes.admin import admin_bp
     from app.routes.leaderboard import leaderboard_bp
     from app.routes.debug import debug_bp
+    from app.routes.setup import setup_bp
     
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(users_bp, url_prefix='/api/users')
@@ -62,6 +63,7 @@ def create_app():
     app.register_blueprint(admin_bp, url_prefix='/api/admin')
     app.register_blueprint(leaderboard_bp, url_prefix='/api/leaderboard')
     app.register_blueprint(debug_bp, url_prefix='/api/debug')
+    app.register_blueprint(setup_bp, url_prefix='/api/setup')
     
     # Root endpoint
     @app.route('/', methods=['GET'])
