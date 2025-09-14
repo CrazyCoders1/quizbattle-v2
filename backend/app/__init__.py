@@ -63,6 +63,21 @@ def create_app():
     app.register_blueprint(leaderboard_bp, url_prefix='/api/leaderboard')
     app.register_blueprint(debug_bp, url_prefix='/api/debug')
     
+    # Root endpoint
+    @app.route('/', methods=['GET'])
+    def root():
+        return jsonify({
+            'name': 'QuizBattle API',
+            'version': '1.0.0',
+            'status': 'running',
+            'endpoints': {
+                'health': '/health',
+                'auth': '/api/auth',
+                'admin': '/api/admin',
+                'challenges': '/api/challenges'
+            }
+        }), 200
+    
     # Health check endpoint
     @app.route('/health', methods=['GET'])
     def health_check():
