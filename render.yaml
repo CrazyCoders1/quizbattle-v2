@@ -2,7 +2,11 @@ services:
   - type: web
     name: quizbattle-backend
     env: python
-    buildCommand: pip install --upgrade pip && pip install -r backend/requirements.txt
+    runtime: python-3.9.18
+    buildCommand: |
+      python --version
+      pip install --upgrade pip
+      pip install -r backend/requirements.txt
     startCommand: cd backend && gunicorn run:app --bind 0.0.0.0:$PORT
     envVars:
       - key: JWT_SECRET
@@ -15,3 +19,5 @@ services:
         value: production
       - key: PORT
         value: 10000
+      - key: PYTHON_VERSION
+        value: 3.9.18
