@@ -4,9 +4,13 @@ services:
     env: python
     runtime: python-3.11.9
     buildCommand: |
+      echo "🚀 Starting QuizBattle build..."
       python --version
+      python backend/check_python.py
+      echo "📦 Installing dependencies..."
       pip install --upgrade pip
       pip install -r backend/requirements.txt
+      echo "✅ Build completed!"
     startCommand: cd backend && gunicorn run:app --bind 0.0.0.0:$PORT
     envVars:
       - key: JWT_SECRET
