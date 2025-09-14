@@ -2,7 +2,7 @@ services:
   - type: web
     name: quizbattle-backend
     env: python
-    runtime: python-3.9.18
+    runtime: python-3.11.9
     buildCommand: |
       python --version
       pip install --upgrade pip
@@ -20,4 +20,4 @@ services:
       - key: PORT
         value: 10000
       - key: PYTHON_VERSION
-        value: 3.9.18
+        value: 3.11.9
