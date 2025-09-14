@@ -16,25 +16,29 @@ limiter = Limiter(key_func=get_remote_address)
 mongo_client = None
 
 def create_app():
+    from dotenv import load_dotenv
+    load_dotenv()  # Load environment variables
+    
     app = Flask(__name__)
     
-    # Configuration
-    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
+    # Configuration - use environment variables for production
+    app.config['SECRET_KEY'] = os.environ.get('JWT_SECRET', 'dev-secret-key-change-in-production')
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://quizbattle:password@localhost:5432/quizbattle')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'jwt-secret-string')
+    app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET', 'jwt-secret-string')
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
     app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(days=30)
     
     # MongoDB configuration
-    mongodb_url = os.environ.get('MONGODB_URL', 'mongodb://localhost:27017/')
+    mongodb_url = os.environ.get('MONGO_URI', 'mongodb://localhost:27017/')
     mongodb_db = os.environ.get('MONGODB_DB', 'quizbattle_logs')
     
     # Initialize extensions
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
-    CORS(app)
+    # Enable CORS for frontend - allow all origins for now, restrict in production
+    CORS(app, origins=["*"], supports_credentials=True)
     limiter.init_app(app)
     
     # Initialize MongoDB

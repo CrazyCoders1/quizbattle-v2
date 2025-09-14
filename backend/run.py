@@ -1,5 +1,10 @@
+import os
+from dotenv import load_dotenv
 from app import create_app, db
 from app.models import User, QuizQuestion, Challenge, QuizResult, Leaderboard, Admin
+
+# Load environment variables from .env file for local development
+load_dotenv()
 
 app = create_app()
 

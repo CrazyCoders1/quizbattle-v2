@@ -1,0 +1,11 @@
+[build]
+  command = "cd frontend && npm install && npm run build"
+  publish = "frontend/build"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Environment variables (set these in Netlify dashboard)
+# REACT_APP_API_URL = https://your-backend-name.onrender.com/api

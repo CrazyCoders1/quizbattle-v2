@@ -2,6 +2,8 @@
 
 A comprehensive full-stack quiz platform built with Flask, React, PostgreSQL, and MongoDB. Features competitive challenges, real-time leaderboards, AI-powered question extraction, and secure admin management.
 
+**🌐 Live Demo**: Deploy to Render + Netlify in minutes!
+
 ## 🏗️ Tech Stack
 
 ### Backend
@@ -9,9 +11,10 @@ A comprehensive full-stack quiz platform built with Flask, React, PostgreSQL, an
 - **SQLAlchemy** - ORM for PostgreSQL
 - **Flask-Migrate** - Database migrations
 - **JWT** - Authentication
-- **PostgreSQL** - Main database
-- **MongoDB** - Logs and admin data
+- **PostgreSQL** - Main database (Neon)
+- **MongoDB** - Logs and admin data (Atlas)
 - **PyMongo** - MongoDB integration
+- **Gunicorn** - Production WSGI server
 
 ### Frontend
 - **React 18** - Frontend framework
@@ -20,11 +23,14 @@ A comprehensive full-stack quiz platform built with Flask, React, PostgreSQL, an
 - **Axios** - HTTP client
 - **React Hot Toast** - Notifications
 - **React Circular Progressbar** - Progress visualization
+- **Tailwind CSS** - Styling framework
 
-### Infrastructure
-- **Docker** - Containerization
-- **Docker Compose** - Multi-container orchestration
-- **Gunicorn** - WSGI server
+### Cloud Hosting
+- **Render** - Backend hosting (Flask API)
+- **Netlify** - Frontend hosting (React SPA)
+- **Neon** - PostgreSQL database
+- **MongoDB Atlas** - MongoDB cloud
+- **Auto HTTPS** - SSL certificates included
 
 ## 📂 Project Structure
 
@@ -58,28 +64,52 @@ quizbattle/
 
 ## 🚀 Quick Start
 
-### Prerequisites
-- Docker and Docker Compose
-- Git
+### 🌐 Production Deployment (Recommended)
 
-### Installation
+**Deploy to Render + Netlify in 5 minutes:**
 
-1. **Clone the repository**
+1. **Fork & Clone**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/CrazyCoders1/quizbattle
    cd quizbattle
    ```
 
-2. **Start the application**
+2. **Deploy Backend to Render**
+   - Connect your GitHub repo to [Render](https://render.com)
+   - Render auto-detects the `Procfile` and `requirements.txt`
+   - Set environment variables in Render dashboard
+
+3. **Deploy Frontend to Netlify**
+   - Connect your GitHub repo to [Netlify](https://netlify.com)
+   - Netlify auto-detects the `netlify.toml` configuration
+   - Set `REACT_APP_API_URL` to your Render backend URL
+
+4. **Done!** Your app is live with HTTPS and auto-deployments
+
+📚 **Detailed Guide**: See [RENDER_NETLIFY_DEPLOYMENT.md](RENDER_NETLIFY_DEPLOYMENT.md)
+
+### 💻 Local Development (No Docker)
+
+1. **Clone the repository**
    ```bash
-   docker-compose up --build
+   git clone https://github.com/CrazyCoders1/quizbattle
+   cd quizbattle
    ```
 
-3. **Access the application**
+2. **Run the startup script**
+   ```bash
+   # Windows
+   start_local.bat
+   
+   # Or manually:
+   cd backend && pip install -r requirements.txt && flask run
+   cd frontend && npm install && npm start
+   ```
+
+3. **Access locally**
    - Frontend: http://localhost:3000
    - Backend API: http://localhost:5000
-   - PostgreSQL: localhost:5432
-   - MongoDB: localhost:27017
+   - Health Check: http://localhost:5000/health
 
 ### Default Credentials
 - **Admin Login**: username: `admin`, password: `admin123`
@@ -153,24 +183,30 @@ quizbattle/
 - **pdf_uploads** - PDF processing metadata
 - **admin_actions** - Admin activity tracking
 
-## 🐳 Docker Setup
+## 🌍 Environment Variables
 
-### Services
-- **postgres** - PostgreSQL database
-- **mongodb** - MongoDB database
-- **backend** - Flask API server
-- **frontend** - React application
-
-### Environment Variables
+### Backend (Render Dashboard)
 ```bash
-# Backend
-SECRET_KEY=your-secret-key
-JWT_SECRET_KEY=your-jwt-secret
-DATABASE_URL=postgresql://quizbattle:password@postgres:5432/quizbattle
-MONGODB_URL=mongodb://admin:password@mongodb:27017/
-MONGODB_DB=quizbattle_logs
+JWT_SECRET=your-secret-key-here
+DATABASE_URL=your-neon-postgres-url-here
+MONGO_URI=your-mongodb-atlas-url-here
+FLASK_ENV=production
+PORT=10000
+```
 
-# Frontend
+### Frontend (Netlify Dashboard)
+```bash
+REACT_APP_API_URL=https://your-backend-name.onrender.com/api
+```
+
+### Local Development
+```bash
+# Backend .env file
+JWT_SECRET=your-secret-key-here
+DATABASE_URL=your-local-postgres-url
+MONGO_URI=your-local-mongo-url
+
+# Frontend .env file
 REACT_APP_API_URL=http://localhost:5000/api
 ```
 
@@ -260,17 +296,35 @@ DEEPSEEK_API_KEY=your-deepseek-api-key-here
 
 ## 🚀 Deployment
 
-### Production Deployment
-1. Update environment variables for production
-2. Use production-grade secrets
-3. Configure reverse proxy (nginx)
-4. Set up SSL certificates
-5. Use production database instances
+### 🌐 Cloud Deployment (Render + Netlify)
 
-### Docker Production
+**Status**: ✅ **Production Ready** - No Docker required!
+
+1. **Backend to Render**:
+   - Auto-detects Flask app via `Procfile`
+   - Uses `requirements.txt` for dependencies
+   - Automatic HTTPS and health checks
+   - PostgreSQL via Neon integration
+
+2. **Frontend to Netlify**:
+   - Auto-detects React app via `netlify.toml`
+   - Automatic builds with `npm run build`
+   - CDN distribution and HTTPS
+   - SPA routing with redirects
+
+3. **Databases**:
+   - **PostgreSQL**: Neon (serverless Postgres)
+   - **MongoDB**: Atlas (cloud MongoDB)
+   - Automatic connection pooling and backups
+
+### 📦 Legacy Docker Support
 ```bash
-docker-compose -f docker-compose.prod.yml up -d
+# Docker files still available but not recommended
+docker-compose up --build  # Local development
+docker-compose -f docker-compose.prod.yml up -d  # Production
 ```
+
+📚 **Migration Guide**: See [REFACTOR_SUMMARY.md](REFACTOR_SUMMARY.md)
 
 ## 📝 Contributing
 

@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: quizbattle-backend
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn run:app
+    envVars:
+      - key: JWT_SECRET
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: MONGO_URI
+        sync: false
+      - key: FLASK_ENV
+        value: production

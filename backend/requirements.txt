@@ -14,13 +14,4 @@ pytest-flask==1.2.0
 requests==2.31.0
 Pillow==10.0.1
 PyPDF2==3.0.1
-flask-limiter
-flask-jwt-extended
-flask-cors
-flask-migrate
-flask-sqlalchemy
-flask-healthz
-structlog
-marshmallow
-webargs
 
