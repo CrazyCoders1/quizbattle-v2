@@ -1,0 +1,37 @@
+RENDER DEPLOYMENT CONFIGURATION
+=====================================
+
+## ENVIRONMENT VARIABLES TO SET IN RENDER DASHBOARD:
+
+DATABASE_URL=postgresql://neondb_owner:npg_NY1EtTX5cqZH@ep-dawn-star-a1lemfrx-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+
+MONGO_URI=mongodb+srv://quizbattle-db:4XPuEpIO2UUMemYR@cluster0.pzs2nrd.mongodb.net/quizbattle?retryWrites=true&w=majority&appName=Cluster0
+
+JWT_SECRET=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0
+
+FLASK_ENV=production
+
+PORT=10000
+
+## START COMMAND TO SET IN RENDER:
+
+python render_init_db.py && gunicorn -b 0.0.0.0:10000 wsgi:app
+
+## DEPLOYMENT STEPS:
+
+1. Go to https://dashboard.render.com
+2. Find your QuizBattle backend service
+3. Click "Environment" tab
+4. Clear all existing environment variables
+5. Add the 5 environment variables above (copy/paste exactly)
+6. Click "Settings" tab  
+7. Update "Start Command" to: python render_init_db.py && gunicorn -b 0.0.0.0:10000 wsgi:app
+8. Click "Deploy" and select "Clear Build Cache & Deploy"
+
+## VERIFICATION COMMANDS (after deployment):
+
+Health Check:
+curl -i https://your-backend-domain/health
+
+Registration Test:
+curl -i -X POST https://your-backend-domain/api/auth/register -H "Content-Type: application/json" -d '{"username":"smoketest-prod","email":"smoketest-prod@example.com","password":"Test@1234"}'
