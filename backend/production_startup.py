@@ -1,35 +1,126 @@
 #!/usr/bin/env python3
 """
-Production startup script for Render deployment
+Production startup script for Render deployment - Linux compatible
 Ensures database is initialized before starting the app
 """
 import os
 import sys
 import subprocess
 import time
+from sqlalchemy import create_engine, text, inspect
+from sqlalchemy.orm import sessionmaker
+from werkzeug.security import generate_password_hash
+import pymongo
+from datetime import datetime
 
-def run_command(cmd, description):
-    """Run a command and handle errors"""
-    print(f"🔄 {description}...")
+def initialize_postgres():
+    """Initialize Postgres database"""
+    print("🔧 Initializing Neon Postgres database...")
+    
     try:
-        result = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=60)
-        if result.returncode == 0:
-            print(f"✅ {description} completed successfully")
-            if result.stdout:
-                print(f"   Output: {result.stdout[:200]}...")
-            return True
-        else:
-            print(f"❌ {description} failed with return code {result.returncode}")
-            if result.stderr:
-                print(f"   Error: {result.stderr[:200]}...")
-            if result.stdout:
-                print(f"   Output: {result.stdout[:200]}...")
+        db_url = os.getenv('DATABASE_URL')
+        if not db_url:
+            print("❌ DATABASE_URL not found")
             return False
-    except subprocess.TimeoutExpired:
-        print(f"❌ {description} timed out after 60 seconds")
-        return False
+        
+        engine = create_engine(db_url, echo=False)
+        SessionLocal = sessionmaker(bind=engine)
+        session = SessionLocal()
+        
+        print("✅ Connected to Neon Postgres")
+        
+        # Check existing tables
+        inspector = inspect(engine)
+        existing_tables = inspector.get_table_names()
+        
+        # Create tables if needed
+        if 'user' not in existing_tables:
+            session.execute(text("""
+                CREATE TABLE IF NOT EXISTS "user" (
+                    id SERIAL PRIMARY KEY,
+                    username VARCHAR(80) UNIQUE NOT NULL,
+                    email VARCHAR(120) UNIQUE NOT NULL,
+                    password_hash VARCHAR(128),
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """))
+            print("✅ Created user table")
+        
+        if 'admin' not in existing_tables:
+            session.execute(text("""
+                CREATE TABLE IF NOT EXISTS admin (
+                    id SERIAL PRIMARY KEY,
+                    username VARCHAR(80) UNIQUE NOT NULL,
+                    email VARCHAR(120) UNIQUE,
+                    password_hash VARCHAR(128)
+                )
+            """))
+            print("✅ Created admin table")
+        
+        if 'quiz_question' not in existing_tables:
+            session.execute(text("""
+                CREATE TABLE IF NOT EXISTS quiz_question (
+                    id SERIAL PRIMARY KEY,
+                    question TEXT NOT NULL,
+                    option_a VARCHAR(255),
+                    option_b VARCHAR(255),
+                    option_c VARCHAR(255),
+                    option_d VARCHAR(255),
+                    correct_answer VARCHAR(1),
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """))
+            print("✅ Created quiz_question table")
+        
+        session.commit()
+        
+        # Seed admin if not exists
+        admin_check = session.execute(text("SELECT COUNT(*) FROM admin WHERE username = 'admin'"))
+        if admin_check.scalar() == 0:
+            admin_password = generate_password_hash('Admin@123')
+            session.execute(text("""
+                INSERT INTO admin (username, email, password_hash)
+                VALUES ('admin', 'admin@example.com', :password_hash)
+            """), {'password_hash': admin_password})
+            session.commit()
+            print("✅ Admin user created")
+        
+        session.close()
+        return True
+        
     except Exception as e:
-        print(f"❌ {description} failed with exception: {e}")
+        print(f"❌ Postgres initialization failed: {e}")
+        return False
+
+def initialize_mongodb():
+    """Initialize MongoDB Atlas"""
+    print("🔧 Initializing MongoDB Atlas...")
+    
+    try:
+        mongodb_uri = os.getenv('MONGODB_URI')
+        if not mongodb_uri:
+            print("❌ MONGODB_URI not found")
+            return False
+        
+        client = pymongo.MongoClient(mongodb_uri)
+        db = client.quizbattle
+        db.admin.command('ping')
+        print("✅ Connected to MongoDB Atlas")
+        
+        # Create required collections
+        collections = ['logs', 'admin_actions', 'pdf_uploads', 'system_events']
+        existing_collections = db.list_collection_names()
+        
+        for collection_name in collections:
+            if collection_name not in existing_collections:
+                db.create_collection(collection_name)
+                print(f"✅ Created collection: {collection_name}")
+        
+        client.close()
+        return True
+        
+    except Exception as e:
+        print(f"❌ MongoDB initialization failed: {e}")
         return False
 
 def main():
@@ -37,27 +128,34 @@ def main():
     print("🚀 QUIZBATTLE PRODUCTION STARTUP")
     print("=" * 60)
     
-    # Step 1: Initialize database with comprehensive seeding
-    if not run_command("python production_db_seed.py", "Database initialization & seeding"):
-        print("❌ Database initialization failed, but attempting to continue...")
+    # Initialize databases
+    postgres_ok = initialize_postgres()
+    mongodb_ok = initialize_mongodb()
     
-    # Wait a moment for database to be ready
-    print("⏳ Waiting 5 seconds for database to be ready...")
-    time.sleep(5)
+    if postgres_ok:
+        print("✅ Postgres ready")
+    if mongodb_ok:
+        print("✅ MongoDB ready")
     
-    # Step 2: Start the application
-    print("🚀 Starting Gunicorn application server...")
+    # Start the application using gunicorn directly
+    print("🚀 Starting Gunicorn server...")
     
-    # Use exec to replace the process (important for Render)
-    os.execv('/opt/render/project/src/.venv/bin/gunicorn', [
+    # Get port from environment (Render sets PORT)
+    port = os.getenv('PORT', '10000')
+    
+    # Start gunicorn with proper configuration for Render
+    cmd = [
         'gunicorn',
-        '-b', '0.0.0.0:10000',
-        '-w', '4',  # 4 workers for better performance
-        '--timeout', '120',  # 2 minute timeout
-        '--max-requests', '1000',  # Restart workers after 1000 requests
-        '--preload',  # Preload the app for better memory usage
-        'wsgi:app'
-    ])
+        '--bind', f'0.0.0.0:{port}',
+        '--workers', '4',
+        '--timeout', '120',
+        '--max-requests', '1000',
+        '--preload',
+        'run:app'
+    ]
+    
+    print(f"✅ Starting server on port {port}")
+    os.execvp('gunicorn', cmd)
 
 if __name__ == '__main__':
     main()
