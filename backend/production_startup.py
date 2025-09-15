@@ -37,8 +37,8 @@ def main():
     print("🚀 QUIZBATTLE PRODUCTION STARTUP")
     print("=" * 60)
     
-    # Step 1: Initialize database
-    if not run_command("python render_init_db.py", "Database initialization"):
+    # Step 1: Initialize database with comprehensive seeding
+    if not run_command("python production_db_seed.py", "Database initialization & seeding"):
         print("❌ Database initialization failed, but attempting to continue...")
     
     # Wait a moment for database to be ready
