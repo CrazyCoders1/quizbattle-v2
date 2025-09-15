@@ -1,27 +1,25 @@
 services:
+  # Web Service (Flask Backend) - Python 3.12
   - type: web
     name: quizbattle-backend
     env: python
-    runtime: python-3.11.9
-    buildCommand: |
-      echo "🚀 Starting QuizBattle build..."
-      python --version
-      python backend/check_python.py
-      echo "📦 Installing dependencies..."
-      pip install --upgrade pip
-      pip install -r backend/requirements.txt
-      echo "✅ Build completed!"
-    startCommand: cd backend && gunicorn run:app --bind 0.0.0.0:$PORT
+    runtime: python-3.12
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt && flask db upgrade
+    startCommand: gunicorn -w 4 -b 0.0.0.0:10000 backend.app:app
     envVars:
-      - key: JWT_SECRET
-        sync: false
-      - key: DATABASE_URL
-        sync: false
-      - key: MONGO_URI
-        sync: false
+      - key: PYTHON_VERSION
+        value: "3.12"
+      - key: FLASK_APP
+        value: backend/app.py
       - key: FLASK_ENV
         value: production
       - key: PORT
-        value: 10000
-      - key: PYTHON_VERSION
-        value: 3.11.9
+        value: "10000"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false  # Will be set manually in Render dashboard
+      - key: MONGODB_URI
+        sync: false  # Will be set manually in Render dashboard

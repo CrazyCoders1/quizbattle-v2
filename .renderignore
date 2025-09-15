@@ -1,0 +1,40 @@
+# Render deployment ignore file
+
+# Docker files (deprecated for Render deployment)
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Development files
+.env.example
+*.md
+*.txt
+
+# Cache and temporary files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.coverage
+.pytest_cache/
+.vscode/
+.idea/
+
+# Frontend build files (if not needed for backend deployment)
+frontend/node_modules/
+frontend/build/
+frontend/dist/
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore

@@ -23,14 +23,28 @@ def create_app():
     
     # Configuration - use environment variables for production
     app.config['SECRET_KEY'] = os.environ.get('JWT_SECRET', 'dev-secret-key-change-in-production')
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://quizbattle:password@localhost:5432/quizbattle')
+    
+    # Handle DATABASE_URL for psycopg3 compatibility
+    database_url = os.environ.get('DATABASE_URL', 'postgresql://quizbattle:password@localhost:5432/quizbattle')
+    # Ensure postgres:// URLs are converted to postgresql:// for psycopg3
+    if database_url.startswith('postgres://'):
+        database_url = database_url.replace('postgres://', 'postgresql://', 1)
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+    
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+        'pool_pre_ping': True,
+        'pool_recycle': 300,
+        'connect_args': {"sslmode": "require"} if 'localhost' not in database_url else {}
+    }
+    
     app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET', 'jwt-secret-string')
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
     app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(days=30)
     
-    # MongoDB configuration
+    # MongoDB/Redis configuration for logging
     mongodb_url = os.environ.get('MONGO_URI', 'mongodb://localhost:27017/')
+    redis_url = os.environ.get('REDIS_URL', None)
     mongodb_db = os.environ.get('MONGODB_DB', 'quizbattle_logs')
     
     # Initialize extensions
@@ -41,10 +55,23 @@ def create_app():
     CORS(app, origins=["*"], supports_credentials=True)
     limiter.init_app(app)
     
-    # Initialize MongoDB
+    # Initialize MongoDB or Redis for logging
     global mongo_client
-    mongo_client = MongoClient(mongodb_url)
-    app.mongo_db = mongo_client[mongodb_db]
+    try:
+        if redis_url and redis_url.startswith('redis://'):
+            # Use Redis for logging instead of MongoDB on free tier
+            import redis
+            redis_client = redis.from_url(redis_url)
+            app.mongo_db = redis_client  # Use Redis client as logging backend
+            print("✅ Connected to Redis for logging")
+        else:
+            # Use MongoDB for logging
+            mongo_client = MongoClient(mongodb_url)
+            app.mongo_db = mongo_client[mongodb_db]
+            print("✅ Connected to MongoDB for logging")
+    except Exception as e:
+        print(f"⚠️  Warning: Could not connect to logging backend: {str(e)}")
+        app.mongo_db = None  # Graceful degradation
     
     # Register blueprints
     from app.routes.auth import auth_bp

@@ -1,12 +1,28 @@
 import os
+import sys
+from pathlib import Path
 from dotenv import load_dotenv
+
+# Add current directory to Python path
+current_dir = Path(__file__).parent
+sys.path.insert(0, str(current_dir))
+
 from app import create_app, db
-from app.models import User, QuizQuestion, Challenge, QuizResult, Leaderboard, Admin
 
 # Load environment variables from .env file for local development
-load_dotenv()
+# In production, Render will provide these via environment
+if os.path.exists('.env'):
+    load_dotenv()
 
+# Create the Flask app instance
 app = create_app()
+
+# Import models after app creation to avoid circular imports
+try:
+    from app.models import User, QuizQuestion, Challenge, QuizResult, Leaderboard, Admin
+except ImportError as e:
+    print(f"⚠️  Warning: Could not import models: {e}")
+    User = QuizQuestion = Challenge = QuizResult = Leaderboard = Admin = None
 
 @app.shell_context_processor
 def make_shell_context():
@@ -81,4 +97,11 @@ def init_db():
         print("Sample questions created")
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # Get port from environment (Render provides PORT variable)
+    port = int(os.environ.get('PORT', 5000))
+    debug = os.environ.get('FLASK_ENV', 'production') != 'production'
+    
+    print(f"🚀 Starting QuizBattle server on port {port}")
+    print(f"🔧 Debug mode: {debug}")
+    
+    app.run(debug=debug, host='0.0.0.0', port=port)
