@@ -92,54 +92,54 @@ def create_app():
         }), 200
     
     # Auto-initialize database on first startup
-    with app.app_context():
-        try:
-            # Check if tables exist by trying to query Admin table
-            from app.models import Admin, User, QuizQuestion, Challenge
-            Admin.query.first()
-            print("✅ Database tables already exist")
-        except Exception as e:
-            print("🗄️ Database tables not found, initializing...")
-            try:
-                # Create all tables
-                db.create_all()
-                print("✅ Database tables created successfully")
+    # with app.app_context():
+    #     try:
+    #         # Check if tables exist by trying to query Admin table
+    #         from app.models import Admin, User, QuizQuestion, Challenge
+    #         Admin.query.first()
+    #         print("✅ Database tables already exist")
+    #     except Exception as e:
+    #         print("🗄️ Database tables not found, initializing...")
+    #         try:
+    #             # Create all tables
+    #             db.create_all()
+    #             print("✅ Database tables created successfully")
                 
-                # Create admin user if it doesn't exist
-                admin = Admin.query.filter_by(username='admin').first()
-                if not admin:
-                    admin = Admin(username='admin')
-                    admin.set_password('admin123')
-                    db.session.add(admin)
-                    db.session.commit()
-                    print("✅ Admin user created: admin/admin123")
+    #             # Create admin user if it doesn't exist
+    #             admin = Admin.query.filter_by(username='admin').first()
+    #             if not admin:
+    #                 admin = Admin(username='admin')
+    #                 admin.set_password('admin123')
+    #                 db.session.add(admin)
+    #                 db.session.commit()
+    #                 print("✅ Admin user created: admin/admin123")
                 
-                # Add sample questions if none exist
-                if QuizQuestion.query.count() == 0:
-                    sample_questions = [
-                        QuizQuestion(
-                            text="What is the capital of India?",
-                            options=["Mumbai", "Delhi", "Kolkata", "Chennai"],
-                            answer=1,
-                            difficulty="easy",
-                            exam_type="General"
-                        ),
-                        QuizQuestion(
-                            text="What is 2+2?",
-                            options=["3", "4", "5", "6"],
-                            answer=1,
-                            difficulty="easy",
-                            exam_type="Math"
-                        )
-                    ]
-                    for q in sample_questions:
-                        db.session.add(q)
-                    db.session.commit()
-                    print(f"✅ Added {len(sample_questions)} sample questions")
+    #             # Add sample questions if none exist
+    #             if QuizQuestion.query.count() == 0:
+    #                 sample_questions = [
+    #                     QuizQuestion(
+    #                         text="What is the capital of India?",
+    #                         options=["Mumbai", "Delhi", "Kolkata", "Chennai"],
+    #                         answer=1,
+    #                         difficulty="easy",
+    #                         exam_type="General"
+    #                     ),
+    #                     QuizQuestion(
+    #                         text="What is 2+2?",
+    #                         options=["3", "4", "5", "6"],
+    #                         answer=1,
+    #                         difficulty="easy",
+    #                         exam_type="Math"
+    #                     )
+    #                 ]
+    #                 for q in sample_questions:
+    #                     db.session.add(q)
+    #                 db.session.commit()
+    #                 print(f"✅ Added {len(sample_questions)} sample questions")
                 
-                print("🎉 Database initialization completed successfully!")
-            except Exception as init_error:
-                print(f"❌ Database initialization failed: {str(init_error)}")
+    #             print("🎉 Database initialization completed successfully!")
+    #         except Exception as init_error:
+    #             print(f"❌ Database initialization failed: {str(init_error)}")
     
     # Rate limit error handler
     @app.errorhandler(429)
