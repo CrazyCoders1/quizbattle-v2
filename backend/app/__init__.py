@@ -180,6 +180,9 @@ def create_app():
     # Auto-initialize database with production-safe sample data
     with app.app_context():
         try:
+            # Import models first
+            from app.models import User, Admin, QuizQuestion, Challenge, QuizResult, Leaderboard
+            
             # Always ensure tables exist
             db.create_all()
             print("✅ Database tables created/verified successfully")
