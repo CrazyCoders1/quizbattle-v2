@@ -17,10 +17,26 @@ def get_leaderboard():
     
     current_app.logger.info(f"🏆 Leaderboard request: type={leaderboard_type}, challenge_id={challenge_id}, user={current_user_id}")
     
+    # Validate challenge_id if provided
+    if challenge_id:
+        try:
+            challenge_id = int(challenge_id)
+        except (ValueError, TypeError):
+            current_app.logger.error(f"❌ Invalid challenge_id: {challenge_id}")
+            return jsonify({'error': 'Invalid challenge ID'}), 400
+    
     try:
         if leaderboard_type == 'challenge' and challenge_id:
             # Challenge-specific leaderboard
             current_app.logger.info(f"🎯 Getting challenge leaderboard for challenge {challenge_id}")
+            
+            # First verify the challenge exists
+            challenge = Challenge.query.get(challenge_id)
+            if not challenge:
+                current_app.logger.error(f"❌ Challenge {challenge_id} not found")
+                return jsonify({'error': 'Challenge not found'}), 404
+                
+            current_app.logger.info(f"✅ Challenge found: {challenge.name}")
             
             # Get individual results for this specific challenge (not aggregated)
             results = db.session.query(
@@ -55,15 +71,27 @@ def get_leaderboard():
             current_month = datetime.now().month
             current_year = datetime.now().year
             
+            current_app.logger.info(f"🌍 Getting global leaderboard for {current_month}/{current_year}")
+            
             # Get or create leaderboard entries for current month
             leaderboard_entries = db.session.query(Leaderboard).filter(
                 Leaderboard.month == current_month,
                 Leaderboard.year == current_year
             ).all()
             
+            current_app.logger.info(f"📈 Found {len(leaderboard_entries)} existing leaderboard entries")
+            
             if not leaderboard_entries:
                 # Create leaderboard entries for current month
+                current_app.logger.info(f"🛠️ Creating new leaderboard entries for current month")
                 users = User.query.all()
+                current_app.logger.info(f"👥 Found {len(users)} users to process")
+                
+                if not users:
+                    # No users exist, return empty leaderboard
+                    current_app.logger.warning(f"⚠️ No users found in database")
+                    return jsonify({'leaderboard': []}), 200
+                
                 for user in users:
                     # Calculate total score and challenges completed for current month
                     monthly_results = QuizResult.query.filter(
@@ -75,6 +103,8 @@ def get_leaderboard():
                     total_score = sum(result.score for result in monthly_results)
                     challenges_completed = len(monthly_results)
                     
+                    current_app.logger.debug(f"📄 User {user.username}: score={total_score}, completed={challenges_completed}")
+                    
                     leaderboard_entry = Leaderboard(
                         user_id=user.id,
                         month=current_month,
@@ -84,31 +114,51 @@ def get_leaderboard():
                     )
                     db.session.add(leaderboard_entry)
                 
-                db.session.commit()
+                try:
+                    db.session.commit()
+                    current_app.logger.info(f"✅ Created leaderboard entries for {len(users)} users")
+                except Exception as commit_error:
+                    current_app.logger.error(f"❌ Failed to commit leaderboard entries: {commit_error}")
+                    db.session.rollback()
+                    # Fall back to empty leaderboard rather than crashing
+                    return jsonify({'leaderboard': [], 'error': 'Failed to create leaderboard entries'}), 200
+                
                 leaderboard_entries = db.session.query(Leaderboard).filter(
                     Leaderboard.month == current_month,
                     Leaderboard.year == current_year
                 ).all()
             
             # Join with users and sort by score
-            results = db.session.query(
-                Leaderboard,
-                User.username
-            ).join(User).filter(
-                Leaderboard.month == current_month,
-                Leaderboard.year == current_year
-            ).order_by(desc(Leaderboard.total_score)).all()
+            try:
+                results = db.session.query(
+                    Leaderboard,
+                    User.username
+                ).join(User).filter(
+                    Leaderboard.month == current_month,
+                    Leaderboard.year == current_year
+                ).order_by(desc(Leaderboard.total_score)).all()
+                
+                current_app.logger.info(f"📉 Retrieved {len(results)} leaderboard results")
+                
+            except Exception as query_error:
+                current_app.logger.error(f"❌ Failed to query leaderboard results: {query_error}")
+                return jsonify({'leaderboard': [], 'error': 'Failed to retrieve leaderboard data'}), 200
             
             leaderboard = []
             for i, (entry, username) in enumerate(results, 1):
-                leaderboard.append({
-                    'id': entry.id,
-                    'user_id': entry.user_id,
-                    'username': username,
-                    'total_score': entry.total_score,
-                    'challenges_completed': entry.challenges_completed,
-                    'last_updated': entry.last_updated.isoformat() if entry.last_updated else None
-                })
+                try:
+                    leaderboard.append({
+                        'id': entry.id,
+                        'user_id': entry.user_id,
+                        'username': username,
+                        'total_score': entry.total_score,
+                        'challenges_completed': entry.challenges_completed,
+                        'last_updated': entry.last_updated.isoformat() if entry.last_updated else None,
+                        'rank': i
+                    })
+                except Exception as format_error:
+                    current_app.logger.error(f"❌ Error formatting leaderboard entry: {format_error}")
+                    continue
         
         current_app.logger.info(f"✅ Leaderboard retrieved successfully: {len(leaderboard)} entries")
         return jsonify({'leaderboard': leaderboard}), 200

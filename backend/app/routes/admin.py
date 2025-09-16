@@ -134,12 +134,15 @@ def upload_pdf():
     
     if file and file.filename.lower().endswith('.pdf'):
         try:
-            # Save the file
+            # Save the file to tmp directory (writable on Render)
             from PyPDF2 import PdfReader
+            import tempfile
             
-            upload_folder = '/app/uploads'
+            # Use temp directory which is writable on Render
+            upload_folder = '/tmp' if os.path.exists('/tmp') else tempfile.gettempdir()
+            
             if not os.path.exists(upload_folder):
-                os.makedirs(upload_folder)
+                os.makedirs(upload_folder, exist_ok=True)
             
             filename = f"pdf_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{file.filename}"
             filepath = os.path.join(upload_folder, filename)

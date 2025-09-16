@@ -98,7 +98,11 @@ def join_challenge(code):
 @challenges_bp.route('/<int:challenge_id>/play', methods=['GET'])
 @jwt_required()
 def get_challenge_questions(challenge_id):
+    current_user_id = get_jwt_identity()
+    current_app.logger.info(f"🎮 Challenge play request: Challenge={challenge_id}, User={current_user_id}")
+    
     challenge = Challenge.query.get_or_404(challenge_id)
+    current_app.logger.info(f"✅ Challenge found: {challenge.name} (exam_type={challenge.exam_type}, difficulty={challenge.difficulty}, question_count={challenge.question_count})")
     
     # Get questions based on challenge criteria
     questions = QuizQuestion.query.filter_by(
@@ -106,12 +110,34 @@ def get_challenge_questions(challenge_id):
         difficulty=challenge.difficulty
     ).all()
     
+    current_app.logger.info(f"📊 Found {len(questions)} questions for exam_type={challenge.exam_type}, difficulty={challenge.difficulty}")
+    
+    if not questions:
+        current_app.logger.warning(f"❌ No questions found for challenge criteria!")
+        # Try to find any questions with this exam_type
+        fallback_questions = QuizQuestion.query.filter_by(exam_type=challenge.exam_type).all()
+        current_app.logger.info(f"🔄 Fallback: Found {len(fallback_questions)} questions for exam_type={challenge.exam_type} (any difficulty)")
+        
+        if fallback_questions:
+            questions = fallback_questions
+            current_app.logger.info(f"✅ Using fallback questions")
+        else:
+            # Last resort: get any questions
+            any_questions = QuizQuestion.query.limit(10).all()
+            current_app.logger.info(f"🆘 Last resort: Using {len(any_questions)} random questions")
+            questions = any_questions
+    
     # Shuffle and take required number
     import random
     random.shuffle(questions)
     selected_questions = questions[:challenge.question_count]
     
-    return jsonify({'questions': [q.to_dict() for q in selected_questions], 'challenge': challenge.to_dict()}), 200
+    current_app.logger.info(f"🎯 Returning {len(selected_questions)} questions for challenge play")
+    
+    return jsonify({
+        'questions': [q.to_dict() for q in selected_questions], 
+        'challenge': challenge.to_dict()
+    }), 200
 
 @challenges_bp.route('/<int:challenge_id>/submit', methods=['POST'])
 @jwt_required()

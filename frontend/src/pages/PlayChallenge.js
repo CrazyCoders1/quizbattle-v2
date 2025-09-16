@@ -118,14 +118,38 @@ const PlayChallenge = () => {
   const loadChallengeData = async () => {
     try {
       setLoading(true);
+      console.log('🎮 Loading challenge data for challengeId:', challengeId);
+      
       const response = await apiService.getChallengeQuestions(challengeId);
+      console.log('📊 API response:', response.data);
+      
       const { questions: loadedQuestions, challenge: challengeData } = response.data;
+      
+      console.log('🎯 Challenge data:', challengeData);
+      console.log('❓ Questions loaded:', loadedQuestions?.length || 0);
+      
+      if (!challengeData) {
+        console.error('❌ No challenge data received');
+        toast.error('Challenge data not found');
+        navigate('/challenges');
+        return;
+      }
+      
+      if (!loadedQuestions || loadedQuestions.length === 0) {
+        console.error('❌ No questions loaded for challenge');
+        toast.error('No questions available for this challenge');
+        navigate('/challenges');
+        return;
+      }
       
       setChallenge(challengeData);
       setQuestions(loadedQuestions);
       setTimeLeft(challengeData.time_limit * 60); // Convert minutes to seconds
+      
+      console.log('✅ Challenge data loaded successfully');
     } catch (error) {
-      toast.error('Failed to load challenge data');
+      console.error('❌ Error loading challenge data:', error);
+      toast.error(error.response?.data?.error || 'Failed to load challenge data');
       navigate('/challenges');
     } finally {
       setLoading(false);
@@ -291,12 +315,22 @@ const PlayChallenge = () => {
     );
   }
 
-  if (!challenge || !questions.length) {
+  // Debug logging for challenge/questions state
+  console.log('🔍 Debug - challenge:', challenge);
+  console.log('🔍 Debug - questions.length:', questions?.length);
+  console.log('🔍 Debug - loading:', loading);
+  console.log('🔍 Debug - quizStarted:', quizStarted);
+
+  if (!loading && (!challenge || !questions.length)) {
+    console.log('❌ Showing Challenge Not Found - challenge exists:', !!challenge, 'questions count:', questions?.length || 0);
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Challenge Not Found</h2>
           <p className="text-gray-600 mb-6">The challenge you're looking for doesn't exist or has no questions.</p>
+          <div className="text-sm text-gray-500 mb-4">
+            Debug: Challenge={!!challenge ? 'exists' : 'missing'}, Questions={questions?.length || 0}
+          </div>
           <button
             onClick={() => navigate('/challenges')}
             className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"

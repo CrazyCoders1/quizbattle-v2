@@ -12,6 +12,8 @@ const Challenges = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showJoinForm, setShowJoinForm] = useState(false);
   const [joinCode, setJoinCode] = useState('');
+  const [isCreating, setIsCreating] = useState(false);
+  const [isJoining, setIsJoining] = useState(false);
   const [createForm, setCreateForm] = useState({
     name: '',
     exam_type: 'CBSE 11',
@@ -46,6 +48,9 @@ const Challenges = () => {
 
   const handleCreateChallenge = async (e) => {
     e.preventDefault();
+    if (isCreating) return; // Prevent duplicate requests
+    
+    setIsCreating(true);
     try {
       const response = await apiService.createChallenge(createForm);
       toast.success('Challenge created successfully!');
@@ -57,14 +62,19 @@ const Challenges = () => {
         question_count: 10,
         time_limit: 30
       });
-      fetchChallenges();
+      await fetchChallenges();
     } catch (error) {
       toast.error(error.response?.data?.error || 'Failed to create challenge');
+    } finally {
+      setIsCreating(false);
     }
   };
 
   const handleJoinChallenge = async (e) => {
     e.preventDefault();
+    if (isJoining) return; // Prevent duplicate requests
+    
+    setIsJoining(true);
     try {
       const response = await apiService.joinChallenge(joinCode);
       const challenge = response.data.challenge;
@@ -78,6 +88,8 @@ const Challenges = () => {
       }, 1000);
     } catch (error) {
       toast.error(error.response?.data?.error || 'Failed to join challenge');
+    } finally {
+      setIsJoining(false);
     }
   };
   
@@ -286,9 +298,21 @@ const Challenges = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md transition-colors"
+                  disabled={isCreating}
+                  className={`px-4 py-2 text-white rounded-md transition-colors ${
+                    isCreating 
+                      ? 'bg-gray-400 cursor-not-allowed' 
+                      : 'bg-green-500 hover:bg-green-600'
+                  }`}
                 >
-                  Create
+                  {isCreating ? (
+                    <div className="flex items-center">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Creating...
+                    </div>
+                  ) : (
+                    'Create'
+                  )}
                 </button>
               </div>
             </form>
@@ -327,9 +351,21 @@ const Challenges = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors"
+                  disabled={isJoining}
+                  className={`px-4 py-2 text-white rounded-md transition-colors ${
+                    isJoining 
+                      ? 'bg-gray-400 cursor-not-allowed' 
+                      : 'bg-blue-600 hover:bg-blue-700'
+                  }`}
                 >
-                  Join
+                  {isJoining ? (
+                    <div className="flex items-center">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Joining...
+                    </div>
+                  ) : (
+                    'Join'
+                  )}
                 </button>
               </div>
             </form>
