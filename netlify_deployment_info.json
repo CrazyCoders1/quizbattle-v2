@@ -1,0 +1,15 @@
+{
+  "site_id": "cb722e60-1840-454a-be96-5170a476abb4",
+  "site_url": "https://quizbattle-frontend.netlify.app",
+  "admin_url": "https://app.netlify.com/projects/quizbattle-frontend",
+  "ssl_url": "https://quizbattle-frontend.netlify.app",
+  "deploy_url": "http://68c8f2433a38652d715856c4--quizbattle-frontend.netlify.app",
+  "status": "created",
+  "next_steps": [
+    "Connect GitHub repository",
+    "Set build command: npm ci && npm run build", 
+    "Set publish directory: build",
+    "Set base directory: frontend",
+    "Add environment variable REACT_APP_API_URL"
+  ]
+}
