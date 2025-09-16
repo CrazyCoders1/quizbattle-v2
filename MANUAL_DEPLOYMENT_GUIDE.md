@@ -79,7 +79,7 @@
    ADMIN_PASSWORD = admin987
    FLASK_ENV = production
    FLASK_APP = wsgi.py
-   PYTHON_VERSION = 3.11
+   PYTHON_VERSION = 3.11.11
    ```
 
 5. **Health Check**:

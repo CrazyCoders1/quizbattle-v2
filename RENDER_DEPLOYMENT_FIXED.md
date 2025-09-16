@@ -24,17 +24,17 @@ services:
     healthCheckPath: /health
     envVars:
       - key: PYTHON_VERSION
-        value: "3.11"              # ← Updated to 3.11
+        value: "3.11.11"           # ← Fixed: Full version required
       # ... other environment variables
 ```
 
 ### **✅ runtime.txt (Updated)**
 ```txt
-python-3.11.9
+python-3.11.11
 ```
 
 ### **✅ Requirements Updated**
-- **Python**: `3.11.9` (Stable LTS - Render compatible)  
+- **Python**: `3.11.11` (Latest 3.11 patch - Render compatible)
 - **Flask**: `3.0.3` (Stable version)
 - **All dependencies**: Updated to 3.11-compatible versions
 
@@ -65,7 +65,7 @@ python-3.11.9
 ### **render.yaml Changes**
 - ❌ **Removed**: `runtime: python-3.12` (invalid)
 - ✅ **Kept**: `env: python` (correct)
-- ✅ **Updated**: `PYTHON_VERSION` environment variable to `"3.11"`
+- ✅ **Updated**: `PYTHON_VERSION` environment variable to `"3.11.11"`
 
 ### **Requirements Changes**  
 - **Python**: `3.12.7` → `3.11.9` (Render compatible)
