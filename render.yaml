@@ -3,10 +3,11 @@ services:
     name: quizbattle-backend
     env: python
     runtime: python-3.11
-    region: singapore
+    region: oregon
     plan: free
-    buildCommand: pip install --no-cache-dir -r backend/requirements.txt && cd backend && flask db upgrade
-    startCommand: cd backend && gunicorn -w 4 -b 0.0.0.0:$PORT wsgi:app
+    rootDir: backend
+    buildCommand: pip install --no-cache-dir -r requirements.txt && flask db upgrade
+    startCommand: gunicorn -w 4 -b 0.0.0.0:$PORT wsgi:app
     healthCheckPath: /health
     envVars:
       - key: PYTHON_VERSION
@@ -16,10 +17,10 @@ services:
       - key: FLASK_ENV
         value: production
       - key: JWT_SECRET
-        sync: false
+        value: e57f70fc4fd74a56aa710c40ad11caaa
       - key: ADMIN_PASSWORD
-        sync: false
+        value: admin987
       - key: DATABASE_URL
-        sync: false
+        value: postgresql://neondb_owner:npg_WFb53JDcuAzZ@ep-mute-wave-a1c13882-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
       - key: MONGO_URI
-        sync: false
+        value: mongodb+srv://quizbattle:KITUx2vkIKq4wgJ3@cluster0.tntmlsa.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
