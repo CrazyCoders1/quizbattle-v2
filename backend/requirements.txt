@@ -12,8 +12,8 @@ Werkzeug==3.0.4
 # Database - Stable
 SQLAlchemy==2.0.35
 
-# PostgreSQL driver - psycopg3 with binary and pool support
-psycopg[binary,pool]>=3.2.1
+# PostgreSQL driver - psycopg2-binary for Flask compatibility
+psycopg2-binary==2.9.9
 
 # MongoDB driver - Stable
 pymongo==4.8.0

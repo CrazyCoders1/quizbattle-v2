@@ -24,9 +24,9 @@ def create_app():
     # Configuration - use environment variables for production
     app.config['SECRET_KEY'] = os.environ.get('JWT_SECRET', 'dev-secret-key-change-in-production')
     
-    # Handle DATABASE_URL for psycopg3 compatibility
+    # Handle DATABASE_URL for psycopg2 compatibility
     database_url = os.environ.get('DATABASE_URL', 'postgresql://quizbattle:password@localhost:5432/quizbattle')
-    # Ensure postgres:// URLs are converted to postgresql:// for psycopg3
+    # Ensure postgres:// URLs are converted to postgresql:// for psycopg2
     if database_url.startswith('postgres://'):
         database_url = database_url.replace('postgres://', 'postgresql://', 1)
     app.config['SQLALCHEMY_DATABASE_URI'] = database_url
