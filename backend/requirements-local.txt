@@ -1,0 +1,25 @@
+# Simplified requirements for local development (SQLite)
+Flask==3.0.3
+Flask-SQLAlchemy==3.1.1
+Flask-Migrate==4.0.7
+Flask-CORS==4.0.1
+Flask-JWT-Extended==4.6.0
+Werkzeug==3.0.4
+
+# Database - SQLite (built-in, no PostgreSQL needed locally)
+SQLAlchemy==2.0.35
+
+# HTTP client for API calls
+requests==2.32.3
+
+# Environment management
+python-dotenv==1.0.1
+
+# Security and JWT
+PyJWT==2.8.0
+
+# Basic utilities
+click==8.1.7
+itsdangerous==2.2.0
+Jinja2==3.1.4
+MarkupSafe==2.1.5

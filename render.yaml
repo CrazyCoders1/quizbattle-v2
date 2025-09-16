@@ -20,6 +20,8 @@ services:
       - key: ADMIN_PASSWORD
         value: admin987
       - key: DATABASE_URL
-        value: postgresql://neondb_owner:npg_WFb53JDcuAzZ@ep-mute-wave-a1c13882-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+        value: postgresql://neondb_owner:npg_NY1EtTX5cqZH@ep-dawn-star-a1lemfrx-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
       - key: MONGO_URI
-        value: mongodb+srv://quizbattle:KITUx2vkIKq4wgJ3@cluster0.tntmlsa.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+        value: mongodb+srv://quizbattle-db:4XPuEpIO2UUMemYR@cluster0.pzs2nrd.mongodb.net/quizbattle?retryWrites=true&w=majority&appName=Cluster0
+      - key: CORS_ORIGINS
+        value: "https://quizbattle-v2.netlify.app,https://www.quizbattle-v2.netlify.app"

@@ -74,12 +74,16 @@ def get_leaderboard():
             current_app.logger.info(f"🌍 Getting global leaderboard for {current_month}/{current_year}")
             
             # Get or create leaderboard entries for current month
-            leaderboard_entries = db.session.query(Leaderboard).filter(
-                Leaderboard.month == current_month,
-                Leaderboard.year == current_year
-            ).all()
-            
-            current_app.logger.info(f"📈 Found {len(leaderboard_entries)} existing leaderboard entries")
+            try:
+                leaderboard_entries = db.session.query(Leaderboard).filter(
+                    Leaderboard.month == current_month,
+                    Leaderboard.year == current_year
+                ).all()
+                
+                current_app.logger.info(f"📈 Found {len(leaderboard_entries)} existing leaderboard entries")
+            except Exception as query_error:
+                current_app.logger.error(f"❌ Failed to query existing leaderboard entries: {query_error}")
+                return jsonify({'leaderboard': [], 'error': 'Failed to fetch leaderboard data'}), 500
             
             if not leaderboard_entries:
                 # Create leaderboard entries for current month

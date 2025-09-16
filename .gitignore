@@ -1,0 +1,47 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local database files
+backend/instance/
+*.db
+*.sqlite
+*.sqlite3
+
+# Virtual environments
+venv/
+env/
+.env.local
+
+# Node modules
+node_modules/
+.npm
+.node_repl_history
+
+# Build directories
+build/
+dist/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local development files
+*.log
+.coverage
+.pytest_cache/
+
+# Environment variables (keep .env for production deployment)
+backend/.env.local
+frontend/.env.local
+
+# Test files
+backend/run_validation_tests*.py
+backend/validation_results.json

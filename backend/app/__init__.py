@@ -67,8 +67,17 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
-    # Enable CORS for frontend - allow all origins for now, restrict in production
-    CORS(app, origins=["*"], supports_credentials=True)
+    # Enable CORS for frontend - production-ready configuration
+    cors_origins = os.environ.get('CORS_ORIGINS', 'http://localhost:3000')
+    if cors_origins == '*' or os.environ.get('FLASK_ENV') == 'development':
+        # Development: allow all origins
+        CORS(app, origins=["*"], supports_credentials=True)
+        print("🌐 CORS: Development mode - allowing all origins")
+    else:
+        # Production: restrict to specific origins
+        allowed_origins = [origin.strip() for origin in cors_origins.split(',')]
+        CORS(app, origins=allowed_origins, supports_credentials=True)
+        print(f"🔒 CORS: Production mode - allowed origins: {allowed_origins}")
     limiter.init_app(app)
     
     # Initialize MongoDB or Redis for logging
