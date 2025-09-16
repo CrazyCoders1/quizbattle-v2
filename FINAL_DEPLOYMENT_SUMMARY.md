@@ -59,7 +59,7 @@ JWT_SECRET=e57f70fc4fd74a56aa710c40ad11caaa
 ADMIN_PASSWORD=admin987
 FLASK_ENV=production
 FLASK_APP=wsgi.py
-PYTHON_VERSION=3.12
+PYTHON_VERSION=3.11
 ```
 
 ### **Step 2: Configure Netlify Frontend**

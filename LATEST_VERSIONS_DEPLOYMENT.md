@@ -3,8 +3,8 @@
 ## ⚡ **Updated to Latest Versions (2024)**
 
 ### **Backend Stack (Latest)**
-- **Python**: `3.12.7` (December 2024)
-- **Flask**: `3.1.0` (Latest stable)
+- **Python**: `3.11.9` (Stable LTS)
+- **Flask**: `3.0.3` (Stable)
 - **SQLAlchemy**: `2.0.36` (Latest ORM)
 - **psycopg**: `3.2.3+` (Latest PostgreSQL driver)
 - **Gunicorn**: `23.0.0` (Latest WSGI server)
@@ -51,7 +51,7 @@ services:
   - type: web
     name: quizbattle-backend
     env: python
-    runtime: python-3.12    # ← Updated to 3.12
+    # No runtime specified - uses Python 3.11 from runtime.txt
     region: oregon
     plan: free
     rootDir: backend
@@ -61,7 +61,7 @@ services:
 
 ### **✅ backend/requirements.txt**
 ```txt
-Flask==3.1.0              # ← Latest Flask
+Flask==3.0.3              # ← Stable Flask
 SQLAlchemy==2.0.36        # ← Latest ORM
 gunicorn==23.0.0          # ← Latest WSGI
 pymongo==4.10.1           # ← Latest MongoDB

@@ -2,7 +2,6 @@ services:
   - type: web
     name: quizbattle-backend
     env: python
-    runtime: python-3.12
     region: oregon
     plan: free
     rootDir: backend
@@ -11,7 +10,7 @@ services:
     healthCheckPath: /health
     envVars:
       - key: PYTHON_VERSION
-        value: "3.12"
+        value: "3.11"
       - key: FLASK_APP
         value: wsgi.py
       - key: FLASK_ENV
