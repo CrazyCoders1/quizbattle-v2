@@ -7,7 +7,9 @@ class Admin(db.Model):
     password_hash = db.Column(db.String(256))
     
     def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
+        # Use PBKDF2-SHA256 which produces consistent ~102 character hashes
+        # This ensures compatibility with both 128 and 256 character columns
+        self.password_hash = generate_password_hash(password, method='pbkdf2:sha256')
     
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)

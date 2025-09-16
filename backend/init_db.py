@@ -15,6 +15,7 @@ os.environ.setdefault('FLASK_APP', 'wsgi.py')
 
 from app import create_app, db
 from app.models import User, Admin, QuizQuestion, Challenge, QuizResult, Leaderboard
+from werkzeug.security import generate_password_hash
 
 def init_database():
     """Initialize database with tables and sample data"""
@@ -22,18 +23,32 @@ def init_database():
     
     with app.app_context():
         try:
-            # Create all tables
+            # Create all tables (this will use migration schema if migrations have run)
             db.create_all()
             print("✅ Database tables created successfully")
             
             # Create admin user if it doesn't exist
             admin = Admin.query.filter_by(username='admin').first()
             if not admin:
+                admin_password = os.environ.get('ADMIN_PASSWORD', 'admin987')
                 admin = Admin(username='admin')
-                admin.set_password(os.environ.get('ADMIN_PASSWORD', 'admin987'))
-                db.session.add(admin)
-                db.session.commit()
-                print(f"✅ Admin user created: admin/{os.environ.get('ADMIN_PASSWORD', 'admin987')}")
+                
+                # Try to create admin with standard method first
+                try:
+                    admin.set_password(admin_password)
+                    db.session.add(admin)
+                    db.session.commit()
+                    print(f"✅ Admin user created: admin/{admin_password}")
+                except Exception as password_error:
+                    # If password hash is too long, use a shorter method
+                    db.session.rollback()
+                    print(f"⚠️ Standard password hash failed, trying shorter method: {password_error}")
+                    
+                    # Use PBKDF2 with SHA1 which produces shorter hashes
+                    admin.password_hash = generate_password_hash(admin_password, method='pbkdf2:sha1')
+                    db.session.add(admin)
+                    db.session.commit()
+                    print(f"✅ Admin user created with fallback method: admin/{admin_password}")
             else:
                 print("✅ Admin user already exists")
             
