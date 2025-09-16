@@ -293,12 +293,13 @@ const Admin = () => {
             )}
             Refresh
           </button>
-        <button
-          onClick={logout}
-          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-        >
-          Logout
-        </button>
+          <button
+            onClick={logout}
+            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+          >
+            Logout
+          </button>
+        </div>
       </div>
 
       {/* Tab Navigation */}
