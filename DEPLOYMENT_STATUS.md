@@ -19,10 +19,10 @@
 - ✅ Database migrations ready
 
 ### 🌐 Netlify Frontend Setup
-- ✅ **Site Created**: `quizbattle-frontend`
-- ✅ **Site ID**: `cb722e60-1840-454a-be96-5170a476abb4`
-- ✅ **URL**: https://quizbattle-frontend.netlify.app
-- ✅ **Admin Dashboard**: https://app.netlify.com/projects/quizbattle-frontend
+- ✅ **Site Created**: `quizbattle-v2-frontend`
+- ✅ **Site ID**: `61a75694-077f-4466-8f94-d765c8f99f28`
+- ✅ **URL**: https://quizbattle-v2-frontend.netlify.app
+- ✅ **Admin Dashboard**: https://app.netlify.com/projects/quizbattle-v2-frontend
 
 ## 🎯 Next Steps: Manual Deployment
 
@@ -61,7 +61,7 @@
 ### Step 2: Configure Netlify Frontend
 
 1. **Connect Repository**:
-   - Go to https://app.netlify.com/projects/quizbattle-frontend
+   - Go to https://app.netlify.com/projects/quizbattle-v2-frontend
    - Click "Site settings" → "Build & deploy" → "Link repository"
    - Connect to `https://github.com/CrazyCoders1/quizbattle-v2`
 
@@ -92,7 +92,7 @@
 
 ## 📊 Expected Final URLs
 - **Backend**: `https://quizbattle-backend-[hash].onrender.com`
-- **Frontend**: `https://quizbattle-frontend.netlify.app`
+- **Frontend**: `https://quizbattle-v2-frontend.netlify.app`
 
 ## 🧪 Testing Checklist
 

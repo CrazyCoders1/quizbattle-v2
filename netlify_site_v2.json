@@ -1,0 +1,8 @@
+{
+  "name": "quizbattle-v2-frontend",
+  "build_settings": {
+    "base_dir": "frontend",
+    "cmd": "npm ci && npm run build",
+    "dir": "build"
+  }
+}
