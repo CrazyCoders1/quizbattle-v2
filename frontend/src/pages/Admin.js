@@ -14,6 +14,7 @@ const Admin = () => {
   const [showCreateQuestion, setShowCreateQuestion] = useState(false);
   const [selectedQuestions, setSelectedQuestions] = useState([]);
   const [bulkDeleteLoading, setBulkDeleteLoading] = useState(false);
+  const [creatingQuestion, setCreatingQuestion] = useState(false);
   const [questionFilters, setQuestionFilters] = useState({
     difficulty: 'all',
     exam_type: 'all',
@@ -113,6 +114,7 @@ const Admin = () => {
       return;
     }
 
+    setCreatingQuestion(true);
     try {
       await apiService.createQuestion(newQuestion);
       toast.success('Question created successfully!');
@@ -128,6 +130,8 @@ const Admin = () => {
       fetchDashboardData(); // Also refresh dashboard stats
     } catch (error) {
       toast.error(error.response?.data?.error || 'Failed to create question');
+    } finally {
+      setCreatingQuestion(false);
     }
   };
 
@@ -266,6 +270,29 @@ const Admin = () => {
           <h1 className="text-3xl font-bold text-gray-900">Admin Panel</h1>
           <p className="text-gray-600">Welcome back, {admin?.username}</p>
         </div>
+        
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={() => {
+              toast.promise(
+                fetchDashboardData(),
+                {
+                  loading: 'Refreshing data...',
+                  success: 'Data refreshed successfully!',
+                  error: 'Failed to refresh data'
+                }
+              );
+            }}
+            disabled={loading}
+            className="bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
+          >
+            {loading ? (
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+            ) : (
+              '🔄'
+            )}
+            Refresh
+          </button>
         <button
           onClick={logout}
           className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
@@ -806,9 +833,17 @@ const Admin = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md transition-colors"
+                  disabled={creatingQuestion}
+                  className="px-4 py-2 bg-green-500 hover:bg-green-600 disabled:bg-green-400 disabled:cursor-not-allowed text-white rounded-md transition-colors flex items-center gap-2"
                 >
-                  Create Question
+                  {creatingQuestion ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      Creating...
+                    </>
+                  ) : (
+                    'Create Question'
+                  )}
                 </button>
               </div>
             </form>

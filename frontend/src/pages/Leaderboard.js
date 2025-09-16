@@ -7,6 +7,8 @@ const Leaderboard = () => {
   const { isAuthenticated } = useAuth();
   const [leaderboard, setLeaderboard] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [retrying, setRetrying] = useState(false);
   const [viewType, setViewType] = useState('global'); // 'global' or 'challenge'
   const [challenges, setChallenges] = useState([]);
   const [selectedChallenge, setSelectedChallenge] = useState(null);
@@ -26,15 +28,49 @@ const Leaderboard = () => {
     }
   }, [viewType, selectedChallenge]);
 
-  const fetchLeaderboard = async () => {
+  const fetchLeaderboard = async (isRetry = false) => {
     try {
+      if (isRetry) {
+        setRetrying(true);
+        setError(null);
+      } else {
+        setLoading(true);
+      }
+      
       const challengeId = viewType === 'challenge' ? selectedChallenge : null;
+      console.log(`📊 Fetching ${viewType} leaderboard, challengeId:`, challengeId);
+      
       const response = await apiService.getLeaderboard(viewType, challengeId);
-      setLeaderboard(response.data.leaderboard || []);
+      const leaderboardData = response.data.leaderboard || [];
+      
+      console.log(`✅ Leaderboard fetched:`, leaderboardData.length, 'entries');
+      setLeaderboard(leaderboardData);
+      setError(null);
+      
     } catch (error) {
-      toast.error('Failed to fetch leaderboard');
+      console.error('❌ Leaderboard fetch error:', error);
+      const errorMessage = error.response?.data?.error || error.message || 'Unknown error';
+      
+      setError({
+        message: errorMessage,
+        status: error.response?.status,
+        type: viewType,
+        challengeId: viewType === 'challenge' ? selectedChallenge : null
+      });
+      
+      if (!isRetry) {
+        if (error.response?.status === 404) {
+          toast.error('Challenge not found. Please select a different challenge.');
+        } else if (error.response?.status >= 500) {
+          toast.error('Server error. The leaderboard will retry automatically.');
+        } else {
+          toast.error(`Failed to load leaderboard: ${errorMessage}`);
+        }
+      }
+      
     } finally {
       setLoading(false);
+      setRetrying(false);
     }
   };
 
@@ -137,8 +173,51 @@ const Leaderboard = () => {
         )}
       </div>
 
+      {/* Error State */}
+      {error && (
+        <div className="bg-white rounded-lg shadow-md p-8 text-center">
+          <div className="text-6xl mb-4">😔</div>
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">Failed to Load Leaderboard</h3>
+          <p className="text-gray-600 mb-4">
+            {error.status === 404 
+              ? 'The requested challenge was not found. Please select a different challenge.'
+              : error.status >= 500
+              ? 'Server is temporarily unavailable. Please try again in a moment.'
+              : error.message
+            }
+          </p>
+          <div className="flex justify-center space-x-4">
+            <button
+              onClick={() => fetchLeaderboard(true)}
+              disabled={retrying}
+              className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg font-medium transition-colors"
+            >
+              {retrying ? (
+                <div className="flex items-center">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  Retrying...
+                </div>
+              ) : (
+                'Retry'
+              )}
+            </button>
+            {error.type === 'challenge' && (
+              <button
+                onClick={() => {
+                  setSelectedChallenge(null);
+                  setViewType('global');
+                }}
+                className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+              >
+                View Global Instead
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Leaderboard */}
-      {leaderboard.length === 0 ? (
+      {!error && leaderboard.length === 0 ? (
         <div className="text-center py-12">
           <div className="text-6xl mb-4">📊</div>
           <h3 className="text-xl font-semibold text-gray-900 mb-2">
@@ -157,7 +236,7 @@ const Leaderboard = () => {
             Start Practicing
           </a>
         </div>
-      ) : (
+      ) : !error && (
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
           <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
             <h2 className="text-lg font-semibold text-gray-900">

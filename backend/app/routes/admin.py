@@ -134,19 +134,54 @@ def upload_pdf():
     
     if file and file.filename.lower().endswith('.pdf'):
         try:
-            # Save the file to tmp directory (writable on Render)
+            # Import required modules
             from PyPDF2 import PdfReader
             import tempfile
+            from flask import current_app
+            
+            current_app.logger.info(f"📁 Starting PDF processing: {file.filename}")
             
             # Use temp directory which is writable on Render
-            upload_folder = '/tmp' if os.path.exists('/tmp') else tempfile.gettempdir()
+            upload_folder = None
+            for tmp_path in ['/tmp', tempfile.gettempdir(), './tmp']:
+                if os.path.exists(tmp_path) or tmp_path == tempfile.gettempdir():
+                    upload_folder = tmp_path
+                    break
+                    
+            if not upload_folder:
+                current_app.logger.error("❌ No writable temp directory found")
+                return jsonify({'error': 'Server configuration error: no writable directory'}), 500
             
-            if not os.path.exists(upload_folder):
+            current_app.logger.info(f"📂 Using upload folder: {upload_folder}")
+            
+            # Ensure directory exists and is writable
+            try:
                 os.makedirs(upload_folder, exist_ok=True)
+                # Test write access
+                test_file = os.path.join(upload_folder, '.write_test')
+                with open(test_file, 'w') as f:
+                    f.write('test')
+                os.remove(test_file)
+                current_app.logger.info("✅ Directory write test successful")
+            except Exception as e:
+                current_app.logger.error(f"❌ Directory not writable: {str(e)}")
+                return jsonify({'error': f'Cannot write to temp directory: {str(e)}'}), 500
             
-            filename = f"pdf_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{file.filename}"
+            # Generate safe filename
+            safe_filename = re.sub(r'[^\w\s-]', '', file.filename.replace(' ', '_'))
+            filename = f"pdf_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{safe_filename}"
             filepath = os.path.join(upload_folder, filename)
+            
+            current_app.logger.info(f"💾 Saving file to: {filepath}")
             file.save(filepath)
+            
+            # Verify file was saved
+            if not os.path.exists(filepath):
+                current_app.logger.error(f"❌ File not found after save: {filepath}")
+                return jsonify({'error': 'Failed to save uploaded file'}), 500
+                
+            file_size = os.path.getsize(filepath)
+            current_app.logger.info(f"✅ File saved successfully: {file_size} bytes")
             
             # Process PDF and extract questions
             reader = PdfReader(filepath)
@@ -188,8 +223,21 @@ def upload_pdf():
             }
             
             # Insert into MongoDB (note: fixed the mongo access)
-            from flask import current_app
-            current_app.mongo_db.pdf_uploads.insert_one(upload_log)
+            try:
+                current_app.mongo_db.pdf_uploads.insert_one(upload_log)
+                current_app.logger.info("✅ Upload logged to MongoDB")
+            except Exception as mongo_error:
+                current_app.logger.warning(f"⚠️ MongoDB logging failed: {str(mongo_error)}")
+            
+            # Clean up temp file
+            try:
+                if os.path.exists(filepath):
+                    os.remove(filepath)
+                    current_app.logger.info(f"🗑️ Cleaned up temp file: {filename}")
+            except Exception as cleanup_error:
+                current_app.logger.warning(f"⚠️ Failed to cleanup temp file: {str(cleanup_error)}")
+            
+            current_app.logger.info(f"✅ PDF processing completed successfully: {len(saved_questions)} questions added")
             
             return jsonify({
                 'message': 'PDF processed successfully!',
@@ -208,6 +256,17 @@ def upload_pdf():
             }), 200
             
         except Exception as e:
+            current_app.logger.error(f"❌ PDF processing failed: {str(e)}")
+            
+            # Clean up temp file on error
+            try:
+                if 'filepath' in locals() and os.path.exists(filepath):
+                    os.remove(filepath)
+                    current_app.logger.info(f"🗑️ Cleaned up temp file after error: {filename}")
+            except Exception as cleanup_error:
+                current_app.logger.warning(f"⚠️ Failed to cleanup temp file after error: {str(cleanup_error)}")
+            
+            db.session.rollback()
             return jsonify({'error': f'Failed to process PDF: {str(e)}'}), 500
     else:
         return jsonify({'error': 'Only PDF files are allowed'}), 400

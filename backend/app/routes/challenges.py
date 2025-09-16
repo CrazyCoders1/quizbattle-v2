@@ -22,8 +22,25 @@ def create_challenge():
         return jsonify({'error': 'Admins cannot create challenges'}), 403
     
     try:
+        # Check for duplicate challenge name by the same user
+        challenge_name = data.get('name', '').strip()
+        if not challenge_name:
+            return jsonify({'error': 'Challenge name is required'}), 400
+            
+        existing_challenge = Challenge.query.filter_by(
+            name=challenge_name,
+            created_by=int(current_user_id),
+            is_active=True
+        ).first()
+        
+        if existing_challenge:
+            current_app.logger.warning(f"🚫 Duplicate challenge name '{challenge_name}' by user {current_user_id}")
+            return jsonify({
+                'error': f'You already have an active challenge named "{challenge_name}". Please choose a different name.'
+            }), 409
+        
         challenge = Challenge(
-            name=data.get('name'),
+            name=challenge_name,
             exam_type=data.get('exam_type'),
             difficulty=data.get('difficulty'),
             question_count=data.get('question_count', 10),

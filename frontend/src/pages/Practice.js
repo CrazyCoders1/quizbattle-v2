@@ -33,23 +33,58 @@ const Practice = () => {
 
   const startQuiz = async () => {
     setLoading(true);
+    console.log('🚀 Starting practice quiz with filters:', filters);
+    
     try {
-      const response = await apiService.getQuestions(filters.exam_type, filters.difficulty);
-      const allQuestions = response.data.questions;
+      // Add timeout to prevent infinite loading
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Request timeout')), 30000); // 30 second timeout
+      });
+      
+      const apiPromise = apiService.getQuestions(filters.exam_type, filters.difficulty);
+      const response = await Promise.race([apiPromise, timeoutPromise]);
+      
+      console.log('📊 API response:', response.data);
+      const allQuestions = response.data.questions || [];
+      
+      console.log(`❓ Questions received: ${allQuestions.length} for ${filters.exam_type} (${filters.difficulty})`);
+      
+      if (!allQuestions || allQuestions.length === 0) {
+        // Handle empty question case
+        toast.error(
+          `No questions found for ${filters.exam_type} (${filters.difficulty}). Try different filters or contact admin.`, 
+          { duration: 5000 }
+        );
+        setLoading(false);
+        return;
+      }
       
       // Shuffle and take required number of questions
-      const shuffled = allQuestions.sort(() => 0.5 - Math.random());
-      const selectedQuestions = shuffled.slice(0, filters.question_count);
+      const shuffled = [...allQuestions].sort(() => 0.5 - Math.random());
+      const selectedQuestions = shuffled.slice(0, Math.min(filters.question_count, allQuestions.length));
+      
+      console.log(`✅ Starting quiz with ${selectedQuestions.length} questions`);
       
       setQuestions(selectedQuestions);
-      setTimeLeft(filters.question_count * 60); // 1 minute per question
+      setTimeLeft(selectedQuestions.length * 60); // 1 minute per question
       setQuizStarted(true);
       setCurrentQuestion(0);
       setAnswers({});
       setQuizCompleted(false);
       setScore(null);
+      
     } catch (error) {
-      toast.error('Failed to load questions');
+      console.error('❌ Practice quiz start error:', error);
+      
+      if (error.message === 'Request timeout') {
+        toast.error('Request timed out. Please check your connection and try again.', { duration: 5000 });
+      } else if (error.response?.status === 404) {
+        toast.error('Questions API not found. Please contact administrator.', { duration: 5000 });
+      } else if (error.response?.status >= 500) {
+        toast.error('Server error. Please try again later.', { duration: 5000 });
+      } else {
+        toast.error(`Failed to load questions: ${error.message || 'Unknown error'}`, { duration: 5000 });
+      }
     } finally {
       setLoading(false);
     }

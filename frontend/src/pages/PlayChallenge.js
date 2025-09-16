@@ -321,16 +321,51 @@ const PlayChallenge = () => {
   console.log('🔍 Debug - loading:', loading);
   console.log('🔍 Debug - quizStarted:', quizStarted);
 
-  if (!loading && (!challenge || !questions.length)) {
-    console.log('❌ Showing Challenge Not Found - challenge exists:', !!challenge, 'questions count:', questions?.length || 0);
+  // Handle case where challenge exists but no questions are available
+  if (!loading && challenge && questions?.length === 0) {
+    console.log('⚠️ Challenge found but no questions available');
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center max-w-md mx-auto p-6">
+          <div className="text-6xl mb-4">🏆</div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">No Questions Available</h2>
+          <p className="text-gray-600 mb-6">
+            The challenge "{challenge.name}" exists, but there are currently no questions available for 
+            {challenge.exam_type} ({challenge.difficulty} difficulty).
+          </p>
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+            <p className="text-sm text-yellow-800">
+              This might happen if the database hasn't been populated with questions yet. 
+              Please contact the administrator or try a different challenge.
+            </p>
+          </div>
+          <div className="flex justify-center space-x-4">
+            <button
+              onClick={() => navigate('/challenges')}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+            >
+              Back to Challenges
+            </button>
+            <button
+              onClick={() => window.location.reload()}
+              className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Only show "Challenge Not Found" if challenge itself is missing
+  if (!loading && !challenge) {
+    console.log('❌ Challenge not found - redirecting');
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Challenge Not Found</h2>
-          <p className="text-gray-600 mb-6">The challenge you're looking for doesn't exist or has no questions.</p>
-          <div className="text-sm text-gray-500 mb-4">
-            Debug: Challenge={!!challenge ? 'exists' : 'missing'}, Questions={questions?.length || 0}
-          </div>
+          <p className="text-gray-600 mb-6">The challenge you're looking for doesn't exist or has been deactivated.</p>
           <button
             onClick={() => navigate('/challenges')}
             className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"

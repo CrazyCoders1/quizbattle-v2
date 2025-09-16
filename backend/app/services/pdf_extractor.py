@@ -314,41 +314,61 @@ class PDFQuestionExtractor:
         self._initialize_providers()
     
     def _load_api_keys(self, api_keys_file: str) -> Dict[str, str]:
-        """Load API keys from file"""
+        """Load API keys from environment variables or file"""
         keys = {}
-        try:
-            if api_keys_file is None:
-                # Default to root directory
-                import os
-                api_keys_file = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), '..', 'api_keys.txt')
-            
+        
+        # First try environment variables (production-safe)
+        import os
+        env_keys = {
+            'DeepSeek': os.environ.get('DEEPSEEK_API_KEY'),
+            'SambaCloud': os.environ.get('SAMBACLOUD_API_KEY'),
+            'OpenAI': os.environ.get('OPENAI_API_KEY'),
+            'LLAVA': os.environ.get('LLAVA_API_KEY'),
+            'OpenRouter': os.environ.get('OPENROUTER_API_KEY')
+        }
+        
+        # Add environment keys if they exist
+        for key, value in env_keys.items():
+            if value and value.strip():
+                keys[key] = value.strip()
+                if current_app:
+                    current_app.logger.info(f"✅ Loaded {key} API key from environment")
+        
+        # If no environment keys found, try file fallback
+        if not keys and api_keys_file:
+            try:
+                if api_keys_file is None:
+                    # Default to backend directory
+                    api_keys_file = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'api_keys.txt')
+                
+                if current_app:
+                    current_app.logger.info(f"🔑 Loading API keys from file: {api_keys_file}")
+                
+                if os.path.exists(api_keys_file):
+                    with open(api_keys_file, 'r') as f:
+                        for line in f:
+                            line = line.strip()
+                            if '=' in line and not line.startswith('#'):
+                                key, value = line.split('=', 1)
+                                keys[key.strip()] = value.strip()
+                    
+                    if current_app:
+                        current_app.logger.info(f"✅ Loaded {len(keys)} API keys from file")
+                else:
+                    if current_app:
+                        current_app.logger.warning(f"⚠️ API keys file not found: {api_keys_file}")
+                        
+            except Exception as e:
+                if current_app:
+                    current_app.logger.error(f"❌ Error loading API keys from file: {str(e)}")
+        
+        # Log final status
+        if keys:
             if current_app:
-                current_app.logger.info(f"🔑 Loading API keys from: {api_keys_file}")
-            else:
-                print(f"🔑 Loading API keys from: {api_keys_file}")
-            
-            with open(api_keys_file, 'r') as f:
-                for line in f:
-                    line = line.strip()
-                    if '=' in line and not line.startswith('#'):
-                        key, value = line.split('=', 1)
-                        keys[key.strip()] = value.strip()
-            
+                current_app.logger.info(f"✅ Total API keys loaded: {len(keys)} providers available")
+        else:
             if current_app:
-                current_app.logger.info(f"✅ Loaded {len(keys)} API keys")
-            else:
-                print(f"✅ Loaded {len(keys)} API keys")
-            
-        except FileNotFoundError:
-            if current_app:
-                current_app.logger.warning("⚠️ API keys file not found, will use regex fallback only")
-            else:
-                print("⚠️ API keys file not found, will use regex fallback only")
-        except Exception as e:
-            if current_app:
-                current_app.logger.error(f"❌ Error loading API keys: {str(e)}")
-            else:
-                print(f"❌ Error loading API keys: {str(e)}")
+                current_app.logger.warning("⚠️ No API keys found - will use regex fallback only")
         
         return keys
     
