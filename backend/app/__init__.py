@@ -35,14 +35,20 @@ def create_app():
     # Optimize connection pool for production
     is_production = 'render.com' in os.environ.get('DATABASE_URL', '') or os.environ.get('FLASK_ENV') == 'production'
     
+    # Configure engine options based on database type
+    is_sqlite = database_url.startswith('sqlite://')
+    
     engine_options = {
         'pool_pre_ping': True,  # Verify connections before use
         'pool_recycle': 300,    # Recycle connections every 5 minutes
         'pool_size': 10 if is_production else 5,  # Connection pool size
         'max_overflow': 20 if is_production else 10,  # Max overflow connections
         'pool_timeout': 30,     # Timeout when getting connection from pool
-        'connect_args': {"sslmode": "require"} if 'localhost' not in database_url else {}
     }
+    
+    # Only add SSL for PostgreSQL, not SQLite
+    if not is_sqlite and 'localhost' not in database_url:
+        engine_options['connect_args'] = {"sslmode": "require"}
     
     app.config['SQLALCHEMY_ENGINE_OPTIONS'] = engine_options
     

@@ -493,6 +493,262 @@ def get_extraction_logs():
         current_app.logger.error(f"❌ Extraction logs error: {str(e)}")
         return jsonify({'error': f'Failed to get extraction logs: {str(e)}'}), 500
 
+@debug_bp.route('/leaderboard/raw', methods=['GET'])
+@jwt_required()
+def get_raw_leaderboard_data():
+    """Forensic endpoint: Get raw quiz_result data for leaderboard analysis"""
+    current_user_id = get_jwt_identity()
+    
+    # Only allow admins
+    if not (isinstance(current_user_id, str) and current_user_id.startswith('admin_')):
+        return jsonify({'error': 'Admin access required'}), 403
+    
+    try:
+        current_app.logger.info("🔍 Raw leaderboard forensic query requested")
+        
+        # Get query parameters
+        limit = request.args.get('limit', 50, type=int)
+        challenge_id = request.args.get('challenge_id', type=int)
+        user_id = request.args.get('user_id', type=int)
+        
+        # Build base query for top scoring quiz results
+        query = QuizResult.query
+        
+        # Apply filters if provided
+        if challenge_id:
+            query = query.filter(QuizResult.challenge_id == challenge_id)
+            current_app.logger.info(f"🎯 Filtering by challenge_id: {challenge_id}")
+        
+        if user_id:
+            query = query.filter(QuizResult.user_id == user_id)
+            current_app.logger.info(f"👤 Filtering by user_id: {user_id}")
+        
+        # Get results ordered by score (top performers first)
+        results = query.order_by(desc(QuizResult.score), desc(QuizResult.submitted_at)).limit(limit).all()
+        
+        # Get user and challenge info for each result
+        forensic_data = []
+        for result in results:
+            user = User.query.get(result.user_id)
+            challenge = Challenge.query.get(result.challenge_id)
+            
+            forensic_data.append({
+                'quiz_result': result.to_dict(),
+                'user_info': {
+                    'id': user.id if user else None,
+                    'username': user.username if user else 'DELETED_USER'
+                },
+                'challenge_info': {
+                    'id': challenge.id if challenge else None,
+                    'name': challenge.name if challenge else 'DELETED_CHALLENGE'
+                }
+            })
+        
+        response_data = {
+            'total_results': len(forensic_data),
+            'query_params': {
+                'limit': limit,
+                'challenge_id': challenge_id,
+                'user_id': user_id
+            },
+            'raw_leaderboard_data': forensic_data
+        }
+        
+        current_app.logger.info(f"✅ Raw leaderboard data compiled: {len(forensic_data)} results")
+        return jsonify(response_data), 200
+        
+    except Exception as e:
+        current_app.logger.error(f"❌ Raw leaderboard forensic error: {str(e)}")
+        return jsonify({'error': f'Failed to get raw leaderboard data: {str(e)}'}), 500
+
+@debug_bp.route('/challenge/<int:challenge_id>/results', methods=['GET'])
+@jwt_required()
+def get_challenge_results_forensic(challenge_id):
+    """Forensic endpoint: Get all quiz results for a specific challenge"""
+    current_user_id = get_jwt_identity()
+    
+    # Only allow admins
+    if not (isinstance(current_user_id, str) and current_user_id.startswith('admin_')):
+        return jsonify({'error': 'Admin access required'}), 403
+    
+    try:
+        current_app.logger.info(f"🔍 Challenge forensic query requested for challenge_id: {challenge_id}")
+        
+        # Verify challenge exists
+        challenge = Challenge.query.get(challenge_id)
+        if not challenge:
+            return jsonify({'error': f'Challenge {challenge_id} not found'}), 404
+        
+        # Get all results for this challenge
+        results = QuizResult.query.filter_by(challenge_id=challenge_id).order_by(
+            desc(QuizResult.score), 
+            QuizResult.submitted_at.asc()
+        ).all()
+        
+        # Get detailed forensic data
+        forensic_results = []
+        user_participation = {}
+        
+        for result in results:
+            user = User.query.get(result.user_id)
+            
+            # Track user participation patterns
+            if result.user_id not in user_participation:
+                user_participation[result.user_id] = {
+                    'username': user.username if user else 'DELETED_USER',
+                    'submission_count': 0,
+                    'best_score': 0,
+                    'avg_score': 0,
+                    'scores': []
+                }
+            
+            user_participation[result.user_id]['submission_count'] += 1
+            user_participation[result.user_id]['scores'].append(result.score)
+            
+            forensic_results.append({
+                'quiz_result': result.to_dict(),
+                'user_info': {
+                    'id': user.id if user else None,
+                    'username': user.username if user else 'DELETED_USER'
+                }
+            })
+        
+        # Calculate user participation stats
+        for user_id, stats in user_participation.items():
+            stats['best_score'] = max(stats['scores'])
+            stats['avg_score'] = sum(stats['scores']) / len(stats['scores'])
+            del stats['scores']  # Remove raw scores for cleaner output
+        
+        response_data = {
+            'challenge_info': challenge.to_dict(),
+            'total_results': len(forensic_results),
+            'unique_participants': len(user_participation),
+            'results': forensic_results,
+            'user_participation_analysis': user_participation,
+            'statistics': {
+                'avg_score': sum(r.score for r in results) / len(results) if results else 0,
+                'max_score': max(r.score for r in results) if results else 0,
+                'min_score': min(r.score for r in results) if results else 0,
+                'score_distribution': {
+                    'perfect_scores': len([r for r in results if r.score == r.total_questions]),
+                    'above_80pct': len([r for r in results if r.score >= (r.total_questions * 0.8)]),
+                    'above_60pct': len([r for r in results if r.score >= (r.total_questions * 0.6)]),
+                    'below_60pct': len([r for r in results if r.score < (r.total_questions * 0.6)])
+                }
+            }
+        }
+        
+        current_app.logger.info(f"✅ Challenge forensic data compiled: {len(forensic_results)} results, {len(user_participation)} users")
+        return jsonify(response_data), 200
+        
+    except Exception as e:
+        current_app.logger.error(f"❌ Challenge forensic error: {str(e)}")
+        return jsonify({'error': f'Failed to get challenge forensic data: {str(e)}'}), 500
+
+@debug_bp.route('/user/<int:user_id>/results', methods=['GET'])
+@jwt_required()
+def get_user_results_forensic(user_id):
+    """Forensic endpoint: Get all quiz results for a specific user"""
+    current_user_id = get_jwt_identity()
+    
+    # Only allow admins
+    if not (isinstance(current_user_id, str) and current_user_id.startswith('admin_')):
+        return jsonify({'error': 'Admin access required'}), 403
+    
+    try:
+        current_app.logger.info(f"🔍 User forensic query requested for user_id: {user_id}")
+        
+        # Verify user exists
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({'error': f'User {user_id} not found'}), 404
+        
+        # Get all results for this user
+        results = QuizResult.query.filter_by(user_id=user_id).order_by(
+            desc(QuizResult.submitted_at)
+        ).all()
+        
+        # Get detailed forensic data
+        forensic_results = []
+        challenge_participation = {}
+        monthly_stats = {}
+        
+        for result in results:
+            challenge = Challenge.query.get(result.challenge_id)
+            submission_month = result.submitted_at.strftime('%Y-%m') if result.submitted_at else 'unknown'
+            
+            # Track challenge participation
+            if result.challenge_id not in challenge_participation:
+                challenge_participation[result.challenge_id] = {
+                    'challenge_name': challenge.name if challenge else 'DELETED_CHALLENGE',
+                    'submissions': 0,
+                    'best_score': 0,
+                    'latest_submission': None
+                }
+            
+            challenge_participation[result.challenge_id]['submissions'] += 1
+            challenge_participation[result.challenge_id]['best_score'] = max(
+                challenge_participation[result.challenge_id]['best_score'], 
+                result.score
+            )
+            challenge_participation[result.challenge_id]['latest_submission'] = result.submitted_at.isoformat() if result.submitted_at else None
+            
+            # Track monthly stats
+            if submission_month not in monthly_stats:
+                monthly_stats[submission_month] = {
+                    'total_score': 0,
+                    'challenges_completed': 0,
+                    'avg_score': 0
+                }
+            
+            monthly_stats[submission_month]['total_score'] += result.score
+            monthly_stats[submission_month]['challenges_completed'] += 1
+            
+            forensic_results.append({
+                'quiz_result': result.to_dict(),
+                'challenge_info': {
+                    'id': challenge.id if challenge else None,
+                    'name': challenge.name if challenge else 'DELETED_CHALLENGE'
+                }
+            })
+        
+        # Calculate monthly averages
+        for month, stats in monthly_stats.items():
+            stats['avg_score'] = stats['total_score'] / stats['challenges_completed'] if stats['challenges_completed'] > 0 else 0
+        
+        # Get current leaderboard entry
+        current_month = datetime.now().month
+        current_year = datetime.now().year
+        current_leaderboard = Leaderboard.query.filter_by(
+            user_id=user_id,
+            month=current_month,
+            year=current_year
+        ).first()
+        
+        response_data = {
+            'user_info': user.to_dict(),
+            'total_results': len(forensic_results),
+            'unique_challenges': len(challenge_participation),
+            'results': forensic_results,
+            'challenge_participation_analysis': challenge_participation,
+            'monthly_performance': monthly_stats,
+            'current_leaderboard_entry': current_leaderboard.to_dict() if current_leaderboard else None,
+            'statistics': {
+                'total_score_all_time': sum(r.score for r in results),
+                'avg_score_all_time': sum(r.score for r in results) / len(results) if results else 0,
+                'best_score': max(r.score for r in results) if results else 0,
+                'perfect_scores': len([r for r in results if r.score == r.total_questions]),
+                'participation_streak': len(set(r.submitted_at.strftime('%Y-%m') for r in results if r.submitted_at))
+            }
+        }
+        
+        current_app.logger.info(f"✅ User forensic data compiled: {len(forensic_results)} results, {len(challenge_participation)} challenges")
+        return jsonify(response_data), 200
+        
+    except Exception as e:
+        current_app.logger.error(f"❌ User forensic error: {str(e)}")
+        return jsonify({'error': f'Failed to get user forensic data: {str(e)}'}), 500
+
 @debug_bp.route('/extraction/models', methods=['GET'])
 @jwt_required()
 def get_openrouter_model_stats():
