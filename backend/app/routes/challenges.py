@@ -121,28 +121,52 @@ def get_challenge_questions(challenge_id):
     challenge = Challenge.query.get_or_404(challenge_id)
     current_app.logger.info(f"✅ Challenge found: {challenge.name} (exam_type={challenge.exam_type}, difficulty={challenge.difficulty}, question_count={challenge.question_count})")
     
-    # Get questions based on challenge criteria
+    # Get questions based on challenge criteria with multiple fallback strategies
     questions = QuizQuestion.query.filter_by(
         exam_type=challenge.exam_type,
-        difficulty=challenge.difficulty
+        difficulty=challenge.difficulty,
+        is_active=True
     ).all()
     
-    current_app.logger.info(f"📊 Found {len(questions)} questions for exam_type={challenge.exam_type}, difficulty={challenge.difficulty}")
+    current_app.logger.info(f"📋 Found {len(questions)} questions for exam_type={challenge.exam_type}, difficulty={challenge.difficulty}")
     
     if not questions:
-        current_app.logger.warning(f"❌ No questions found for challenge criteria!")
-        # Try to find any questions with this exam_type
-        fallback_questions = QuizQuestion.query.filter_by(exam_type=challenge.exam_type).all()
-        current_app.logger.info(f"🔄 Fallback: Found {len(fallback_questions)} questions for exam_type={challenge.exam_type} (any difficulty)")
+        current_app.logger.warning(f"❌ No questions found for exact challenge criteria!")
+        
+        # Fallback 1: Try any difficulty for this exam_type
+        fallback_questions = QuizQuestion.query.filter_by(
+            exam_type=challenge.exam_type,
+            is_active=True
+        ).all()
+        current_app.logger.info(f"🔄 Fallback 1: Found {len(fallback_questions)} questions for exam_type={challenge.exam_type} (any difficulty)")
         
         if fallback_questions:
             questions = fallback_questions
-            current_app.logger.info(f"✅ Using fallback questions")
+            current_app.logger.info(f"✅ Using exam_type fallback questions")
         else:
-            # Last resort: get any questions
-            any_questions = QuizQuestion.query.limit(10).all()
-            current_app.logger.info(f"🆘 Last resort: Using {len(any_questions)} random questions")
-            questions = any_questions
+            # Fallback 2: Try similar exam types (CBSE 11 -> CBSE 12, etc.)
+            similar_exam_types = []
+            if 'CBSE' in challenge.exam_type:
+                similar_exam_types = ['CBSE 11', 'CBSE 12']
+            elif 'JEE' in challenge.exam_type:
+                similar_exam_types = ['JEE Main', 'JEE Advanced']
+            else:
+                similar_exam_types = ['General', 'Science', 'Math']
+            
+            similar_questions = QuizQuestion.query.filter(
+                QuizQuestion.exam_type.in_(similar_exam_types),
+                QuizQuestion.is_active == True
+            ).all()
+            current_app.logger.info(f"🔄 Fallback 2: Found {len(similar_questions)} questions for similar exam types {similar_exam_types}")
+            
+            if similar_questions:
+                questions = similar_questions
+                current_app.logger.info(f"✅ Using similar exam type questions")
+            else:
+                # Fallback 3: Get any active questions
+                any_questions = QuizQuestion.query.filter_by(is_active=True).limit(20).all()
+                current_app.logger.info(f"🆘 Fallback 3 (Last resort): Using {len(any_questions)} random active questions")
+                questions = any_questions
     
     # Shuffle and take required number
     import random
@@ -175,11 +199,47 @@ def submit_challenge(challenge_id):
         
         answers = data.get('answers', {})
     
-        # Calculate score
+        # Calculate score using same logic as play endpoint
+        # Get the same questions that were shown to the user during play
         questions = QuizQuestion.query.filter_by(
             exam_type=challenge.exam_type,
-            difficulty=challenge.difficulty
-        ).limit(challenge.question_count).all()
+            difficulty=challenge.difficulty,
+            is_active=True
+        ).all()
+        
+        # Apply same fallback logic as in play endpoint
+        if not questions:
+            fallback_questions = QuizQuestion.query.filter_by(
+                exam_type=challenge.exam_type,
+                is_active=True
+            ).all()
+            
+            if fallback_questions:
+                questions = fallback_questions
+            else:
+                # Similar exam types fallback
+                similar_exam_types = []
+                if 'CBSE' in challenge.exam_type:
+                    similar_exam_types = ['CBSE 11', 'CBSE 12']
+                elif 'JEE' in challenge.exam_type:
+                    similar_exam_types = ['JEE Main', 'JEE Advanced']
+                else:
+                    similar_exam_types = ['General', 'Science', 'Math']
+                
+                similar_questions = QuizQuestion.query.filter(
+                    QuizQuestion.exam_type.in_(similar_exam_types),
+                    QuizQuestion.is_active == True
+                ).all()
+                
+                if similar_questions:
+                    questions = similar_questions
+                else:
+                    questions = QuizQuestion.query.filter_by(is_active=True).all()
+        
+        # Shuffle and take the same number that would be shown during play
+        import random
+        random.shuffle(questions)
+        questions = questions[:challenge.question_count]
         
         current_app.logger.info(f"🧮 Found {len(questions)} questions for exam_type={challenge.exam_type}, difficulty={challenge.difficulty}")
         

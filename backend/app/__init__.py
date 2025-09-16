@@ -216,8 +216,8 @@ def create_app():
             else:
                 print("✅ Admin user already exists")
             
-            # Add comprehensive sample questions if database is empty
-            if questions_count == 0:
+            # Add comprehensive sample questions if database has fewer than 20 questions
+            if questions_count < 20:
                 print("🎯 Adding comprehensive sample questions for all exam types...")
                 sample_questions = [
                     # CBSE 11 - Easy Questions
