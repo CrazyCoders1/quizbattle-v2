@@ -132,7 +132,8 @@ def create_app():
         
         # Check database connectivity
         try:
-            db.session.execute('SELECT 1')
+            from sqlalchemy import text
+            db.session.execute(text('SELECT 1'))
             health_status['database'] = 'connected'
         except Exception as e:
             health_status['database'] = f'error: {str(e)[:100]}'

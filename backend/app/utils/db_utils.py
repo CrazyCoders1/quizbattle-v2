@@ -62,14 +62,15 @@ def ensure_db_connection():
     Ensure database connection is alive, reconnect if necessary
     """
     try:
-        db.session.execute('SELECT 1')
+        from sqlalchemy import text
+        db.session.execute(text('SELECT 1'))
         return True
     except Exception as e:
         current_app.logger.warning(f"⚠️ Database connection lost, attempting to reconnect: {str(e)}")
         try:
             db.session.rollback()
             db.session.close()
-            db.session.execute('SELECT 1')
+            db.session.execute(text('SELECT 1'))
             current_app.logger.info("✅ Database connection restored")
             return True
         except Exception as reconnect_error:
