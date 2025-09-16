@@ -7,7 +7,7 @@
   NODE_VERSION = "18"
   CI = "false"
   GENERATE_SOURCEMAP = "false"
-  REACT_APP_API_URL = "https://quizbattle-backend-7qzu.onrender.com/api"
+  REACT_APP_API_URL = "https://quizbattle-backend.onrender.com/api"
 
 [[redirects]]
   from = "/*"

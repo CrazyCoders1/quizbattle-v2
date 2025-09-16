@@ -416,8 +416,9 @@ def create_app():
                 
         except Exception as init_error:
             print(f"❌ Database initialization failed: {str(init_error)}")
-            import traceback
-            traceback.print_exc()
+            print("⚠️ Application will start without sample data - this is OK for production")
+            # Don't fail the entire application startup just because sample data couldn't be loaded
+            pass
     
     # Rate limit error handler
     @app.errorhandler(429)
