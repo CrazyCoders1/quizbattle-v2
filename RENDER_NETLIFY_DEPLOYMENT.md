@@ -38,7 +38,7 @@ quizbattle/
 
 1. **Connect Repository**:
    - Go to [render.com](https://render.com) → New → Web Service
-   - Connect your GitHub repository: `https://github.com/CrazyCoders1/quizbattle`
+   - Connect your GitHub repository: `https://github.com/CrazyCoders1/quizbattle-v2`
    - Select **Root Directory**: Leave blank (whole repo)
 
 2. **Configure Build**:
@@ -64,7 +64,7 @@ quizbattle/
 
 1. **Connect Repository**:
    - Go to [netlify.com](https://netlify.com) → New site from Git
-   - Connect your GitHub repository: `https://github.com/CrazyCoders1/quizbattle`
+   - Connect your GitHub repository: `https://github.com/CrazyCoders1/quizbattle-v2`
 
 2. **Configure Build** (Netlify reads `netlify.toml`):
    - **Build command**: `cd frontend && npm install && npm run build`

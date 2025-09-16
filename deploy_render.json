@@ -3,7 +3,7 @@
   "name": "quizbattle-backend",
   "ownerId": "tea-d2un6q15pdvs73alh9k0",
   "serviceDetails": {
-    "repo": "https://github.com/CrazyCoders1/quizbattle",
+    "repo": "https://github.com/CrazyCoders1/quizbattle-v2",
     "branch": "main",
     "rootDir": "backend",
     "runtime": "python",

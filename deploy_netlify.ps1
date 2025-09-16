@@ -22,7 +22,7 @@ Write-Host "📡 Creating Netlify site..." -ForegroundColor Yellow
 $sitePayload = @{
     name = "quizbattle-frontend"
     repo = @{
-        repo = "https://github.com/CrazyCoders1/quizbattle"
+        repo = "https://github.com/CrazyCoders1/quizbattle-v2"
         branch = "main"
         dir = "frontend"
     }

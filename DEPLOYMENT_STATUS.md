@@ -31,13 +31,13 @@
 **Option A: Using Blueprint (Recommended)**
 1. Go to [Render Dashboard](https://dashboard.render.com)
 2. Click "New" → "Blueprint"
-3. Connect repository: `https://github.com/CrazyCoders1/quizbattle`
+3. Connect repository: `https://github.com/CrazyCoders1/quizbattle-v2`
 4. Render will detect `render.yaml` and deploy automatically
 
 **Option B: Manual Service Creation**
 1. Go to [Render Dashboard](https://dashboard.render.com)
 2. Click "New" → "Web Service"
-3. Connect repository: `https://github.com/CrazyCoders1/quizbattle`
+3. Connect repository: `https://github.com/CrazyCoders1/quizbattle-v2`
 4. Configure:
    ```
    Name: quizbattle-backend
@@ -63,7 +63,7 @@
 1. **Connect Repository**:
    - Go to https://app.netlify.com/projects/quizbattle-frontend
    - Click "Site settings" → "Build & deploy" → "Link repository"
-   - Connect to `https://github.com/CrazyCoders1/quizbattle`
+   - Connect to `https://github.com/CrazyCoders1/quizbattle-v2`
 
 2. **Configure Build Settings**:
    ```
@@ -152,6 +152,6 @@ curl -X POST https://[your-backend-url].onrender.com/api/auth/admin/login \
 ---
 
 **Status**: Ready for manual deployment  
-**Repository**: https://github.com/CrazyCoders1/quizbattle  
+**Repository**: https://github.com/CrazyCoders1/quizbattle-v2
 **Configuration**: Complete  
 **Next Action**: Deploy to Render using Blueprint or manual service creation
