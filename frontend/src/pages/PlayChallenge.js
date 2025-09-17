@@ -64,6 +64,92 @@ const PlayChallenge = () => {
     thirtySecond: false
   });
 
+  // Define handleSubmitQuiz first to avoid hoisting issues
+  const handleSubmitQuiz = useCallback(async (forceSubmit = false) => {
+    if (submitting) return;
+    
+    // Check for skipped questions if not forcing submit
+    if (!forceSubmit && skippedQuestions.size > 0) {
+      setShowSkipModal(true);
+      return;
+    }
+    
+    setSubmitting(true);
+    try {
+      const timeTaken = (challenge.time_limit * 60) - timeLeft;
+      const response = await apiService.submitChallenge(challengeId, {
+        answers,
+        time_taken: timeTaken
+      });
+      const submissionResult = response.data.result;
+      
+      // Calculate detailed results for display
+      let correctAnswers = 0;
+      let wrongAnswers = 0;
+      const questionResults = [];
+
+      questions.forEach(question => {
+        const userAnswer = answers[question.id];
+        const isCorrect = userAnswer !== undefined && userAnswer === question.answer;
+        const isAnswered = userAnswer !== undefined;
+        
+        if (isAnswered) {
+          if (isCorrect) {
+            correctAnswers++;
+          } else {
+            wrongAnswers++;
+          }
+        }
+
+        questionResults.push({
+          ...question,
+          userAnswer,
+          isCorrect,
+          isAnswered
+        });
+      });
+
+      const totalQuestions = questions.length;
+      const unanswered = totalQuestions - (correctAnswers + wrongAnswers);
+      const score = Math.max(0, (correctAnswers * 4) - (wrongAnswers * 1));
+      const percentage = Math.round((correctAnswers / totalQuestions) * 100);
+
+      setResult({
+        correct: correctAnswers,
+        wrong: wrongAnswers,
+        unanswered,
+        total: totalQuestions,
+        score,
+        percentage,
+        questionResults,
+        timeTaken: (challenge.time_limit * 60) - timeLeft
+      });
+
+      setQuizCompleted(true);
+      setQuizStarted(false);
+      toast.success('Quiz submitted successfully!');
+      
+      // Refresh leaderboards in background with retry logic
+      setTimeout(async () => {
+        try {
+          console.log('📊 Refreshing leaderboards after submission...');
+          await Promise.allSettled([
+            apiService.getLeaderboard('global'),
+            apiService.getLeaderboard('challenge', challengeId)
+          ]);
+          console.log('✅ Leaderboards refreshed successfully');
+        } catch (error) {
+          console.warn('⚠️ Failed to refresh leaderboards:', error);
+          // Don't show error to user as this is background operation
+        }
+      }, 1000); // Small delay to ensure backend has processed the result
+    } catch (error) {
+      toast.error('Failed to submit quiz');
+    } finally {
+      setSubmitting(false);
+    }
+  }, [challengeId, answers, questions, challenge, timeLeft, submitting, skippedQuestions]);
+
   // Auto-submit when time runs out
   const handleAutoSubmit = useCallback(() => {
     if (quizCompleted || submitting) return;
@@ -194,91 +280,6 @@ const PlayChallenge = () => {
       setCurrentQuestion(currentQuestion + 1);
     }
   };
-
-  const handleSubmitQuiz = useCallback(async (forceSubmit = false) => {
-    if (submitting) return;
-    
-    // Check for skipped questions if not forcing submit
-    if (!forceSubmit && skippedQuestions.size > 0) {
-      setShowSkipModal(true);
-      return;
-    }
-    
-    setSubmitting(true);
-    try {
-      const timeTaken = (challenge.time_limit * 60) - timeLeft;
-      const response = await apiService.submitChallenge(challengeId, {
-        answers,
-        time_taken: timeTaken
-      });
-      const submissionResult = response.data.result;
-      
-      // Calculate detailed results for display
-      let correctAnswers = 0;
-      let wrongAnswers = 0;
-      const questionResults = [];
-
-      questions.forEach(question => {
-        const userAnswer = answers[question.id];
-        const isCorrect = userAnswer !== undefined && userAnswer === question.answer;
-        const isAnswered = userAnswer !== undefined;
-        
-        if (isAnswered) {
-          if (isCorrect) {
-            correctAnswers++;
-          } else {
-            wrongAnswers++;
-          }
-        }
-
-        questionResults.push({
-          ...question,
-          userAnswer,
-          isCorrect,
-          isAnswered
-        });
-      });
-
-      const totalQuestions = questions.length;
-      const unanswered = totalQuestions - (correctAnswers + wrongAnswers);
-      const score = Math.max(0, (correctAnswers * 4) - (wrongAnswers * 1));
-      const percentage = Math.round((correctAnswers / totalQuestions) * 100);
-
-      setResult({
-        correct: correctAnswers,
-        wrong: wrongAnswers,
-        unanswered,
-        total: totalQuestions,
-        score,
-        percentage,
-        questionResults,
-        timeTaken: (challenge.time_limit * 60) - timeLeft
-      });
-
-      setQuizCompleted(true);
-      setQuizStarted(false);
-      toast.success('Quiz submitted successfully!');
-      
-      // Refresh leaderboards in background with retry logic
-      setTimeout(async () => {
-        try {
-          console.log('📊 Refreshing leaderboards after submission...');
-          await Promise.allSettled([
-            apiService.getLeaderboard('global'),
-            apiService.getLeaderboard('challenge', challengeId)
-          ]);
-          console.log('✅ Leaderboards refreshed successfully');
-        } catch (error) {
-          console.warn('⚠️ Failed to refresh leaderboards:', error);
-          // Don't show error to user as this is background operation
-        }
-      }, 1000); // Small delay to ensure backend has processed the result
-    } catch (error) {
-      toast.error('Failed to submit quiz');
-    } finally {
-      setSubmitting(false);
-    }
-  }, [challengeId, answers, questions, challenge, timeLeft, submitting, skippedQuestions]);
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);

@@ -80,64 +80,59 @@ def get_leaderboard():
             
             current_app.logger.info(f"🌍 Getting global leaderboard for {current_month}/{current_year}")
             
-            # Get or create leaderboard entries for current month
-            try:
-                leaderboard_entries = db.session.query(Leaderboard).filter(
-                    Leaderboard.month == current_month,
-                    Leaderboard.year == current_year
-                ).all()
-                
-                current_app.logger.info(f"📈 Found {len(leaderboard_entries)} existing leaderboard entries")
-            except Exception as query_error:
-                current_app.logger.error(f"❌ Failed to query existing leaderboard entries: {query_error}")
-                return jsonify({'leaderboard': [], 'error': 'Failed to fetch leaderboard data'}), 500
+            # Always refresh leaderboard entries to ensure real-time data
+            current_app.logger.info(f"🔄 Refreshing leaderboard entries for current month")
+            users = User.query.all()
+            current_app.logger.info(f"👥 Found {len(users)} users to process")
             
-            if not leaderboard_entries:
-                # Create leaderboard entries for current month
-                current_app.logger.info(f"🛠️ Creating new leaderboard entries for current month")
-                users = User.query.all()
-                current_app.logger.info(f"👥 Found {len(users)} users to process")
-                
-                if not users:
-                    # No users exist, return empty leaderboard
-                    current_app.logger.warning(f"⚠️ No users found in database")
-                    return jsonify({'leaderboard': []}), 200
-                
-                for user in users:
-                    # Calculate total score and challenges completed for current month
-                    monthly_results = QuizResult.query.filter(
-                        QuizResult.user_id == user.id,
-                        func.extract('month', QuizResult.submitted_at) == current_month,
-                        func.extract('year', QuizResult.submitted_at) == current_year
-                    ).all()
-                    
-                    total_score = sum(result.score for result in monthly_results)
-                    challenges_completed = len(monthly_results)
-                    
-                    current_app.logger.debug(f"📄 User {user.username}: score={total_score}, completed={challenges_completed}")
-                    
-                    leaderboard_entry = Leaderboard(
-                        user_id=user.id,
-                        month=current_month,
-                        year=current_year,
-                        total_score=total_score,
-                        challenges_completed=challenges_completed
-                    )
-                    db.session.add(leaderboard_entry)
-                
-                try:
-                    db.session.commit()
-                    current_app.logger.info(f"✅ Created leaderboard entries for {len(users)} users")
-                except Exception as commit_error:
-                    current_app.logger.error(f"❌ Failed to commit leaderboard entries: {commit_error}")
-                    db.session.rollback()
-                    # Fall back to empty leaderboard rather than crashing
-                    return jsonify({'leaderboard': [], 'error': 'Failed to create leaderboard entries'}), 200
-                
-                leaderboard_entries = db.session.query(Leaderboard).filter(
+            if not users:
+                # No users exist, return empty leaderboard
+                current_app.logger.warning(f"⚠️ No users found in database")
+                return jsonify({'leaderboard': []}), 200
+            
+            # Clear existing entries for current month to refresh data
+            try:
+                existing_entries = Leaderboard.query.filter(
                     Leaderboard.month == current_month,
                     Leaderboard.year == current_year
                 ).all()
+                for entry in existing_entries:
+                    db.session.delete(entry)
+                current_app.logger.info(f"🗑️ Cleared {len(existing_entries)} existing leaderboard entries")
+            except Exception as clear_error:
+                current_app.logger.error(f"❌ Failed to clear existing entries: {clear_error}")
+            
+            # Create fresh leaderboard entries for current month
+            for user in users:
+                # Calculate total score and challenges completed for current month
+                monthly_results = QuizResult.query.filter(
+                    QuizResult.user_id == user.id,
+                    func.extract('month', QuizResult.submitted_at) == current_month,
+                    func.extract('year', QuizResult.submitted_at) == current_year
+                ).all()
+                
+                total_score = sum(result.score for result in monthly_results)
+                challenges_completed = len(monthly_results)
+                
+                current_app.logger.debug(f"📄 User {user.username}: score={total_score}, completed={challenges_completed}")
+                
+                leaderboard_entry = Leaderboard(
+                    user_id=user.id,
+                    month=current_month,
+                    year=current_year,
+                    total_score=total_score,
+                    challenges_completed=challenges_completed
+                )
+                db.session.add(leaderboard_entry)
+            
+            try:
+                db.session.commit()
+                current_app.logger.info(f"✅ Created fresh leaderboard entries for {len(users)} users")
+            except Exception as commit_error:
+                current_app.logger.error(f"❌ Failed to commit leaderboard entries: {commit_error}")
+                db.session.rollback()
+                # Fall back to empty leaderboard rather than crashing
+                return jsonify({'leaderboard': [], 'error': 'Failed to create leaderboard entries'}), 200
             
             # Join with users and sort by score
             try:
