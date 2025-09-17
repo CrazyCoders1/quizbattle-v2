@@ -8,7 +8,14 @@ import logging
 
 leaderboard_bp = Blueprint('leaderboard', __name__)
 
-@leaderboard_bp.route('/', methods=['GET'])
+# Handle CORS preflight explicitly to avoid redirects and auth checks
+@leaderboard_bp.route('', methods=['OPTIONS'], strict_slashes=False)
+@leaderboard_bp.route('/', methods=['OPTIONS'], strict_slashes=False)
+def leaderboard_options_root():
+    return "", 204
+
+@leaderboard_bp.route('', methods=['GET'], strict_slashes=False)
+@leaderboard_bp.route('/', methods=['GET'], strict_slashes=False)
 @jwt_required()
 def get_leaderboard():
     current_user_id = get_jwt_identity()
@@ -172,7 +179,11 @@ def get_leaderboard():
         return jsonify({'error': f'Failed to fetch leaderboard: {str(e)}'}), 500
 
 
-@leaderboard_bp.route('/<int:challenge_id>', methods=['GET'])
+@leaderboard_bp.route('/<int:challenge_id>', methods=['OPTIONS'], strict_slashes=False)
+def leaderboard_options_challenge(challenge_id):
+    return "", 204
+
+@leaderboard_bp.route('/<int:challenge_id>', methods=['GET'], strict_slashes=False)
 @jwt_required()
 def get_challenge_leaderboard(challenge_id):
     """Get leaderboard for a specific challenge"""
